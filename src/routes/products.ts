@@ -12,6 +12,13 @@ router.post('', async (req: Request, resp: Response) => {
     const shopId = linkParts[2];
     const productId = linkParts[3];
 
+
+    const product = await ProductModel.findById(productId);
+    if (product) {
+        resp.send(product);
+        return;
+    }
+
     ProductModel.findById(productId, async (_e, product: any) => {
         if (_e) {
             resp.status(500).send({ error: _e });
@@ -20,13 +27,17 @@ router.post('', async (req: Request, resp: Response) => {
 
         if (!product) {
             const productUrl = `${SHOPEE_API}/item/get?itemid=${productId}&shopid=${shopId}`;
+            console.log(productUrl);
+
             axios.get(productUrl)
                 .then((productResponse) => {
                     const productInfo = productResponse.data.item;
 
                     product = {
                         _id: productId,
-                        description: productInfo.description
+                        shop_id: shopId,
+                        name: productInfo.name,
+                        description: productInfo.description,
                     }
 
                     ProductModel.create(product).catch((_e) => { });

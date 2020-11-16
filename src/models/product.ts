@@ -8,6 +8,8 @@ const ProductSchema: Schema = new mongoose.Schema(
             type: String,
             required: [true, 'Product ID is required!']
         },
+        shop_id: String,
+        name: String,
         description: String
     },
     {

@@ -2,16 +2,15 @@ import express, { Request, Response, Router } from 'express';
 import axios from "axios";
 import ProductModel from '../models/product';
 import { PRODUCT_NOT_FOUND } from '../constants/response';
+import { SHOPEE_API } from '../constants/api';
 
 const router: Router = express.Router();
-const SHOPEE_API = process.env.SHOPEE_API;
 
 router.post('', async (req: Request, resp: Response) => {
     const productLink: string = req.body.product;
     let linkParts = productLink.split('.');
     const shopId = linkParts[2];
     const productId = linkParts[3];
-
 
     const product = await ProductModel.findById(productId);
     if (product) {
@@ -26,7 +25,7 @@ router.post('', async (req: Request, resp: Response) => {
         }
 
         if (!product) {
-            const productUrl = `${SHOPEE_API}/item/get?itemid=${productId}&shopid=${shopId}`;
+            const productUrl = `${SHOPEE_API}/v2/item/get?itemid=${productId}&shopid=${shopId}`;
             console.log(productUrl);
 
             axios.get(productUrl)

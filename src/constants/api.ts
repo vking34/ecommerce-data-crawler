@@ -1,0 +1,1 @@
+export const SHOPEE_API = 'http://shopee.vn/api';

@@ -26,10 +26,11 @@ app.use(cors());
 
 
 // routes
-import productRoute from './routes/products';
+import productRoute from './routes/product';
+import shopRoute from './routes/shop';
 
 app.use('/v1/crawlers/products', productRoute);
-
+app.use('/v1/crawlers/shops', shopRoute);
 
 // 
 server.listen(port, () => {

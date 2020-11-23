@@ -1,1 +1,1 @@
-export const SHOPEE_API = 'http://shopee.vn/api';
+export const SHOPEE_API = process.env.SHOPEE_API;

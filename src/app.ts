@@ -33,10 +33,16 @@ app.use('/v1/crawlers/products', productRoute);
 app.use('/v1/crawlers/shops', shopRoute);
 
 // crawler
-import crawl from './tasks/index';
-crawl();
+// import crawl from './tasks/index';
+// crawl();
 
 // 
 server.listen(port, () => {
     console.log('Server listening at port %d', port);
 });
+
+// handle uncaught exceptions
+process.on('uncaughtException', err => {
+    console.error('There was an uncaught error', err)
+    process.exit(1) //mandatory (as per the Node.js docs)
+})

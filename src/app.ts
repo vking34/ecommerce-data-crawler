@@ -33,8 +33,8 @@ app.use('/v1/crawlers/products', productRoute);
 app.use('/v1/crawlers/shops', shopRoute);
 
 // crawler
-// import crawl from './tasks/index';
-// crawl();
+import crawl from './tasks/index';
+crawl();
 
 // 
 server.listen(port, () => {

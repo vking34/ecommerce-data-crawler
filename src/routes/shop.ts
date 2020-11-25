@@ -3,6 +3,7 @@ import { SHOPEE_API } from '../constants/api';
 import { INVALID_SHOP_LINK } from '../constants/response';
 import axios from 'axios';
 import ProductModel from '../models/product';
+import crawlShop from '../tasks/shopCrawler';
 
 
 const router: Router = express.Router();
@@ -86,5 +87,15 @@ router.post('', (req: Request, resp: Response) => {
             console.log('can not get shop detail:', _e);
         });
 });
+
+router.post('/shopee', (req: Request, resp: Response) => {
+    const shopLink: string = req.body.shop;
+    crawlShop(shopLink);
+
+    resp.send({
+        status: true,
+        shop: shopLink
+    });
+})
 
 export default router;

@@ -1,20 +1,37 @@
-// import axios from "axios";
-// import ProductModel from '../models/product';
+import axios from "axios";
+import { SHOPEE_API } from '../constants/api';
+import ShopeeProductModel from '../models/shopeeProduct';
 
 
-// const SHOPEE_API = process.env.SHOPEE_API;
-// export default (shopId: string, productId: string) => {
-//     return new Promise(async (resolve, reject) => {
-//         const productUrl = `${SHOPEE_API}/item/get?itemid=${productId}&shopid=${shopId}`;
-//         const productInfo = (await axios.get(productUrl)).data.item;
-//         console.log(productInfo);
+export default (productUrl: string) => {
+    return new Promise(async (resolve, reject) => {
+        let urlParts = productUrl.split('.');
+        const shopId: string = urlParts[2];
+        const productId: string = urlParts[3];
 
-//         let product = {
-//             _id: productId,
-//             description: productInfo.description
-//         }
-//         ProductModel.
-
-
-//     });
-// }
+        try {
+            let product = ShopeeProductModel.findById(productId);
+            if (product === null) {
+                const productApiUrl = `${SHOPEE_API}/item/get?itemid=${productId}&shopid=${shopId}`;
+                try {
+                    const productResponse = await axios.get(productApiUrl, { timeout: 4000 });
+                    let product = productResponse.data.item;
+                    product._id = productId;
+                    ShopeeProductModel.create(product).catch(_e => { });
+                    console.log('saving product: ', productId);
+                    resolve(productId);
+                }
+                catch (e) {
+                    reject(e);
+                }
+            }
+            else {
+                console.log('saved product: ', productId);
+                reject(productId);
+            }
+        }
+        catch (e) {
+            reject(e);
+        }
+    });
+}

@@ -1,7 +1,8 @@
-
 import { SHOPEE_API } from '../constants/api';
 import axios from 'axios';
 import ShopeeShopModel from '../models/shopeeShop';
+
+
 
 export default async (shopLink: string) => {
     const shopUrl = new URL(shopLink);
@@ -11,8 +12,9 @@ export default async (shopLink: string) => {
         let shop = await ShopeeShopModel.findById(shopName);
         if (shop === null) {
             const shopDetailUrl = `${SHOPEE_API}/v4/shop/get_shop_detail?username=${shopName}`;
+            console.log(shopDetailUrl);
             try {
-                const shopDetailResponse = await axios.get(shopDetailUrl);
+                const shopDetailResponse = await axios.get(shopDetailUrl, { timeout: 4000 });
                 let shop = shopDetailResponse.data.data;
                 shop._id = shopName;
                 ShopeeShopModel.create(shop).catch(_e => { });

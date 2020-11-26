@@ -6,8 +6,8 @@ import util from 'util';
 import xmlFlow from 'xml-flow';
 import { Sitemap } from '../interfaces/shopee';
 import crawlShopSitemap from './shopSitemapCrawler';
-import crawlProductSitemap from './productSitemapCrawler';
-import crawlShopList from './shopListCrawler';
+import crawlProducts from './productSitemapCrawler';
+import crawlShops from './shopListCrawler';
 
 
 export const rootPath = process.env.PWD;
@@ -65,6 +65,7 @@ export default () => {
         }
 
         const shopSitemapQueue: string[] = [];
+        const productSitemapQueue: string[] = [];
         let xmlStream = xmlFlow(shopeeSitemapReaderStream);
 
         xmlStream.on('tag:sitemap', async (sitemap: Sitemap) => {
@@ -74,13 +75,14 @@ export default () => {
                 shopSitemapQueue.push(shopSitemapPath);
             }
             else if (location.includes('items')) {
-                crawlProductSitemap(location);
+                productSitemapQueue.push(location);
             }
         });
 
         xmlStream.on('end', () => {
             shopeeSitemapReaderStream.close();
-            crawlShopList(shopSitemapQueue);
+            crawlShops(shopSitemapQueue);
+            crawlProducts(productSitemapQueue);
         });
 
         resolve(1);

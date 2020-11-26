@@ -20,13 +20,6 @@ const downloadSitemap = async (url: string, filePath: string) => {
     await pipe(response.data, gunzip, fileWriteStream);
 }
 
-// const loadedSitemapNum: SitemapNumber = {
-//     shopSitemapNum: 0,
-//     productSitemapNum: 0
-// }
-
-// const shopSitemapQueue: string[] = [];
-
 export default async (shopSitemapLink: string) => {
     // console.log(shopSitemapLink);
     const shopSitemapUrl = new URL(shopSitemapLink);

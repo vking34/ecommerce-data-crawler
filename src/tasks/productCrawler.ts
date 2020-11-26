@@ -3,22 +3,20 @@ import { SHOPEE_API } from '../constants/api';
 import ShopeeProductModel from '../models/shopeeProduct';
 
 
-export default (productUrl: string) => {
+export default (productId: string, shopId: string) => {
     return new Promise(async (resolve, reject) => {
-        let urlParts = productUrl.split('.');
-        const shopId: string = urlParts[2];
-        const productId: string = urlParts[3];
-
         try {
-            let product = ShopeeProductModel.findById(productId);
+            let product = await ShopeeProductModel.findById(productId);
+            console.log('product:', product);
+
             if (product === null) {
-                const productApiUrl = `${SHOPEE_API}/item/get?itemid=${productId}&shopid=${shopId}`;
+                const productApiUrl = `${SHOPEE_API}/v2/item/get?itemid=${productId}&shopid=${shopId}`;
                 try {
                     const productResponse = await axios.get(productApiUrl, { timeout: 4000 });
                     let product = productResponse.data.item;
                     product._id = productId;
                     ShopeeProductModel.create(product).catch(_e => { });
-                    console.log('saving product: ', productId);
+                    console.log('saving product:', productId);
                     resolve(productId);
                 }
                 catch (e) {
@@ -26,7 +24,7 @@ export default (productUrl: string) => {
                 }
             }
             else {
-                console.log('saved product: ', productId);
+                console.log('saved product:', productId);
                 reject(productId);
             }
         }

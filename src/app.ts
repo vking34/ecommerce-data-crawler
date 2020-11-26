@@ -36,6 +36,10 @@ app.use('/v1/crawlers/shops', shopRoute);
 import crawl from './tasks/index';
 crawl();
 
+import crawlProductList from './tasks/productListCrawler';
+crawlProductList('/home/user/Desktop/cz/crawler/sitemaps/sitemap.items-596.xml');
+
+
 // 
 server.listen(port, () => {
     console.log('Server listening at port %d', port);

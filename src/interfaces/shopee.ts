@@ -7,3 +7,8 @@ export interface SitemapNumber {
     shopSitemapNum: number,
     productSitemapNum: number
 }
+
+export interface ProductElement {
+    productId: string,
+    shopId: string
+}

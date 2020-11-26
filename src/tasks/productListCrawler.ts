@@ -6,7 +6,7 @@ import { ProductElement } from '../interfaces/shopee';
 
 
 export default (productSitemapPath: string) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
         const productQueue: ProductElement[] = [];
         try {
             let readStream: ReadStream = createReadStream(productSitemapPath);
@@ -24,8 +24,6 @@ export default (productSitemapPath: string) => {
             });
 
             xmlStream.on('end', async () => {
-                console.log('productQueue:', productQueue);
-
                 readStream.close();
                 let product: ProductElement = productQueue.shift();
                 while (product) {
@@ -38,7 +36,8 @@ export default (productSitemapPath: string) => {
             });
         }
         catch (e) {
-            reject(e);
+            console.log(e);
+            resolve(0);
         }
     })
 }

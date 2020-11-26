@@ -5,8 +5,8 @@ import { Stats } from 'fs';
 import crawlProductList from './productListCrawler';
 
 
-let pathQueue: string[] = [];
-const downloadSitemaps = (productSitemapQueue: string[]) => {
+
+const downloadSitemaps = (productSitemapQueue: string[], pathQueue: string[]) => {
     return new Promise(async (resolve, reject) => {
         if (!productSitemapQueue) reject(new Error('empty product sitemap queue'));
 
@@ -28,6 +28,7 @@ const downloadSitemaps = (productSitemapQueue: string[]) => {
                     }
                 }
                 else {
+                    pathQueue.push(productSitemapPath);
                     console.log('existed:', productSitemapPath);
                 }
             }
@@ -36,7 +37,6 @@ const downloadSitemaps = (productSitemapQueue: string[]) => {
                     await downloadSitemap(url, productSitemapPath);
                     pathQueue.push(productSitemapPath);
                     console.log('downloaded:', productSitemapPath);
-
                 }
                 catch (e) {
                     console.log(e);
@@ -52,13 +52,13 @@ const downloadSitemaps = (productSitemapQueue: string[]) => {
 }
 
 
-
 export default async (productSitemapQueue: string[]) => {
-    await downloadSitemaps(productSitemapQueue);
+    let pathQueue: string[] = [];
+    await downloadSitemaps(productSitemapQueue, pathQueue);
     let productSitemapPath: string = pathQueue.shift();
 
     while (productSitemapPath) {
-        console.log(productSitemapPath);
+        console.log('productSitemapPath:', productSitemapPath);
         await crawlProductList(productSitemapPath);
         productSitemapPath = productSitemapQueue.shift();
     }

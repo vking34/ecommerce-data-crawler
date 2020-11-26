@@ -4,10 +4,9 @@ import ShopeeProductModel from '../models/shopeeProduct';
 
 
 export default (productId: string, shopId: string) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, _reject) => {
         try {
             let product = await ShopeeProductModel.findById(productId);
-            console.log('product:', product);
 
             if (product === null) {
                 const productApiUrl = `${SHOPEE_API}/v2/item/get?itemid=${productId}&shopid=${shopId}`;
@@ -17,19 +16,20 @@ export default (productId: string, shopId: string) => {
                     product._id = productId;
                     ShopeeProductModel.create(product).catch(_e => { });
                     console.log('saving product:', productId);
-                    resolve(productId);
+                    resolve(1);
                 }
                 catch (e) {
-                    reject(e);
+                    console.log('can not get:', productId);
+                    resolve(0);
                 }
             }
             else {
                 console.log('saved product:', productId);
-                reject(productId);
+                resolve(1);
             }
         }
         catch (e) {
-            reject(e);
+            resolve(0);
         }
     });
 }

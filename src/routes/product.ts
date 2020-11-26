@@ -1,6 +1,7 @@
 import express, { Request, Response, Router } from 'express';
 import axios from "axios";
 import ProductModel from '../models/product';
+import ShopeeProductModel from '../models/shopeeProduct';
 import { PRODUCT_NOT_FOUND } from '../constants/response';
 import { SHOPEE_API } from '../constants/api';
 
@@ -68,6 +69,21 @@ router.get('/:productId', (req: Request, resp: Response) => {
         resp.send(product);
     })
 });
+
+
+router.get('/shopee/:productId', async (req: Request, resp: Response) => {
+    const productId: string = req.params.productId;
+    const product = await ShopeeProductModel.findById(productId);
+    if (!product) {
+        resp.status(400).send(PRODUCT_NOT_FOUND);
+        return;
+    }
+
+    resp.send({
+        status: true,
+        product
+    });
+})
 
 
 export default router;

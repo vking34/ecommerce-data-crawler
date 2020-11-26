@@ -12,3 +12,7 @@ export interface ProductElement {
     productId: string,
     shopId: string
 }
+
+export interface ProductSitemapResult {
+    pathQueue: string[]
+}

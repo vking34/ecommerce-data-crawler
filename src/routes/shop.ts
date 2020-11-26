@@ -1,10 +1,10 @@
 import express, { Request, Response, Router } from 'express';
 import { SHOPEE_API } from '../constants/api';
-import { INVALID_SHOP_LINK } from '../constants/response';
+import { INVALID_SHOP_LINK, SHOP_NOT_FOUND } from '../constants/response';
 import axios from 'axios';
 import ProductModel from '../models/product';
 import crawlShop from '../tasks/shopCrawler';
-
+import ShopeeShopModel from '../models/shopeeShop';
 
 const router: Router = express.Router();
 
@@ -97,5 +97,28 @@ router.post('/shopee', (req: Request, resp: Response) => {
         shop: shopLink
     });
 })
+
+
+router.get('/shopee/:shopName', async (req: Request, resp: Response) => {
+    const shopName: string = req.params.shopName;
+    try {
+        const shop = await ShopeeShopModel.findById(shopName);
+        if (!shop) {
+            resp.send(SHOP_NOT_FOUND);
+            return;
+        }
+
+        resp.send({
+            status: true,
+            shop
+        });
+    }
+    catch (e) {
+        resp.send({
+            status: false,
+            message: 'Can not find shop'
+        })
+    }
+});
 
 export default router;

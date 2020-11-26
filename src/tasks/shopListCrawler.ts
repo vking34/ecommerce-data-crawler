@@ -17,11 +17,13 @@ const crawlShopPromise = (shopSitemapPath: string) => {
             });
 
             xmlStream.on('end', async () => {
+                console.log('shopLinkQueue', shopLinkQueue);
+
                 readStream.close();
                 let shopLink: string = shopLinkQueue.shift();
                 while (shopLink) {
                     await crawlShop(shopLink);
-                    await sleep(2000);
+                    await sleep(3000);
                     shopLink = shopLinkQueue.shift();
                 }
 

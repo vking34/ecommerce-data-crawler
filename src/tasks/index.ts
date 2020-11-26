@@ -4,7 +4,7 @@ import path from 'path';
 import util from 'util';
 // import XMLParser from 'node-xml-stream';
 import xmlFlow from 'xml-flow';
-import { Sitemap, SitemapNumber } from '../interfaces/shopee';
+import { Sitemap } from '../interfaces/shopee';
 import crawlShopSitemap from './shopSitemapCrawler';
 import crawlProductSitemap from './productSitemapCrawler';
 import crawlShopList from './shopListCrawler';
@@ -28,8 +28,7 @@ const downloadShopeeSitemap = async () => {
 }
 
 export default () => {
-    return new Promise(async (resolve, _reject) => {
-        // console.log(sitemapPath);
+    return new Promise(async (resolve, reject) => {
         try {
             if (!fs.existsSync(sitemapPath)) {
                 fs.mkdirSync(sitemapPath);
@@ -37,9 +36,9 @@ export default () => {
         }
         catch (e) {
             console.log(e);
+            reject(e);
+            return;
         }
-
-        // console.log(shopeeSitemapPath);
 
         try {
             const fileStat: Stats = await getFileStat(shopeeSitemapPath);
@@ -55,29 +54,28 @@ export default () => {
             await downloadShopeeSitemap();
         }
 
-        let shopeeSitemapReaderStream: ReadStream = fs.createReadStream(shopeeSitemapPath);
-        shopeeSitemapReaderStream.setEncoding('utf8');
+        let shopeeSitemapReaderStream: ReadStream;
+        try {
+            shopeeSitemapReaderStream = fs.createReadStream(shopeeSitemapPath);
+            shopeeSitemapReaderStream.setEncoding('utf8');
+        }
+        catch (e) {
+            reject(e);
+            return;
+        }
 
-        // shopeeSitemapReaderStream.pipe(parser);
         const shopSitemapQueue: string[] = [];
-        let sitemapNum: SitemapNumber = {
-            shopSitemapNum: 0,
-            productSitemapNum: 0
-        };
         let xmlStream = xmlFlow(shopeeSitemapReaderStream);
+
         xmlStream.on('tag:sitemap', async (sitemap: Sitemap) => {
-            // console.log(sitemap);
             const location = sitemap.loc;
             if (location.includes('shops')) {
-                sitemapNum.shopSitemapNum++;
                 const shopSitemapPath: string = await crawlShopSitemap(location);
                 shopSitemapQueue.push(shopSitemapPath);
             }
             else if (location.includes('items')) {
-                sitemapNum.productSitemapNum++;
                 crawlProductSitemap(location);
             }
-
         });
 
         xmlStream.on('end', () => {
@@ -86,25 +84,5 @@ export default () => {
         });
 
         resolve(1);
-
-        // parsing by node-xml-stream
-        // let parser = new XMLParser();
-        // parser.on('opentag', (name, attributes) => {
-        //     console.log('tage:', name);
-        //     console.log('attributes:', attributes);
-        // });
-
-        // parser.on('text', text => {
-        //     console.log(text);
-        // });
-
-        // parser.on('error', e => {
-        //     console.log(e);
-        // })
-
-        // parser.on('finish', () => {
-        //     console.log('finished!');
-
-        // });
     })
 }

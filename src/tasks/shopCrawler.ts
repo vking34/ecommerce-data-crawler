@@ -3,10 +3,7 @@ import axios from 'axios';
 import ShopeeShopModel from '../models/shopeeShop';
 
 
-
-export default async (shopLink: string) => {
-    const shopUrl = new URL(shopLink);
-    const shopName = shopUrl.pathname.substring(1);
+const crawlShop = async (shopName: string) => {
     // console.log(shopName);
     try {
         let shop = await ShopeeShopModel.findById(shopName);
@@ -32,3 +29,12 @@ export default async (shopLink: string) => {
         console.log('can not get shop:', shopName);
     }
 }
+
+
+export const crawlShopByUrl = (shopLink: string) => {
+    const shopUrl = new URL(shopLink);
+    const shopName = shopUrl.pathname.substring(1);
+    crawlShop(shopName);
+}
+
+export default crawlShop;

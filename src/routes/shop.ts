@@ -3,7 +3,7 @@ import { SHOPEE_API } from '../constants/api';
 import { INVALID_SHOP_LINK, SHOP_NOT_FOUND } from '../constants/response';
 import axios from 'axios';
 import ProductModel from '../models/product';
-import crawlShop from '../tasks/shopCrawler';
+import { crawlShopByUrl } from '../tasks/shopCrawler';
 import ShopeeShopModel from '../models/shopeeShop';
 
 const router: Router = express.Router();
@@ -90,7 +90,7 @@ router.post('', (req: Request, resp: Response) => {
 
 router.post('/shopee', (req: Request, resp: Response) => {
     const shopLink: string = req.body.shop;
-    crawlShop(shopLink);
+    crawlShopByUrl(shopLink);
 
     resp.send({
         status: true,

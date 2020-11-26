@@ -4,7 +4,7 @@ import { ReadStream, createReadStream } from 'fs';
 import { sleep } from '../utils/common';
 
 
-const shopLinkQueue: string[] = [];
+const shopQueue: string[] = [];
 const crawlShopPromise = (shopSitemapPath: string) => {
     return new Promise((resolve, reject) => {
         try {
@@ -13,17 +13,18 @@ const crawlShopPromise = (shopSitemapPath: string) => {
 
             let xmlStream = xmlFlow(readStream);
             xmlStream.on('tag:loc', shopTag => {
-                shopLinkQueue.push(shopTag.$cdata);
+                const shopName = new URL(shopTag.$cdata).pathname.substring(1);
+                shopQueue.push(shopName);
             });
 
             xmlStream.on('end', async () => {
-                // console.log('shopLinkQueue', shopLinkQueue);
+                // console.log('shopQueue', shopQueue);
                 readStream.close();
-                let shopLink: string = shopLinkQueue.shift();
-                while (shopLink) {
-                    await crawlShop(shopLink);
+                let shopName: string = shopQueue.shift();
+                while (shopName) {
+                    await crawlShop(shopName);
                     await sleep(5000);
-                    shopLink = shopLinkQueue.shift();
+                    shopName = shopQueue.shift();
                 }
 
                 resolve(1);

@@ -6,6 +6,22 @@ import { createWriteStream } from 'fs';
 import fs from 'fs';
 
 const pipe = promisify(pipeline);
+
+export const downloadFile = async (url: string, filePath: string) => {
+    const fileWriteStream = createWriteStream(filePath);
+    const response = await axios({
+        url,
+        method: 'GET',
+        responseType: 'stream',
+        // timeout: 30000
+    });
+
+    response.data.pipe(fileWriteStream);
+    response.data.on('end', () => { // always close stream
+        fileWriteStream.close();
+    })
+}
+
 export const downloadSitemap = async (url: string, filePath: string) => {
     const gunzip = createGunzip();
     const fileWriteStream = createWriteStream(filePath);

@@ -1,8 +1,7 @@
 import fs, { ReadStream, Stats } from 'fs';
-import axios from 'axios';
 import path from 'path';
 import util from 'util';
-// import XMLParser from 'node-xml-stream';
+import { downloadFile } from '../utils/common';
 import xmlFlow from 'xml-flow';
 import { Sitemap } from '../interfaces/shopee';
 import crawlShopSitemap from './shopSitemapCrawler';
@@ -10,22 +9,12 @@ import crawlProducts from './productSitemapCrawler';
 import crawlShops from './shopListCrawler';
 
 
-export const rootPath = process.env.PWD;
+export const rootPath: string = process.cwd();
 export const sitemapPath = path.join(rootPath, 'sitemaps')
 const shopeeSitemap = 'shopee.sitemap.xml';
 const shopeeSitemapPath = path.join(sitemapPath, shopeeSitemap);
 const getFileStat = util.promisify(fs.stat);
 
-const downloadShopeeSitemap = async () => {
-    const shopeeSitemapFile = fs.createWriteStream(shopeeSitemapPath);
-    const response = await axios({
-        url: 'http://sitemap.shopee.vn/sitemap.xml',
-        method: 'GET',
-        responseType: 'stream'
-    });
-
-    response.data.pipe(shopeeSitemapFile);
-}
 
 export default () => {
     return new Promise(async (resolve, reject) => {
@@ -43,7 +32,7 @@ export default () => {
         try {
             const fileStat: Stats = await getFileStat(shopeeSitemapPath);
             if (!fileStat.isFile()) {
-                await downloadShopeeSitemap();
+                await downloadFile('http://sitemap.shopee.vn/sitemap.xml', shopeeSitemapPath);
             }
             // else {
             //     console.log('sitemap exists');
@@ -51,7 +40,7 @@ export default () => {
         }
         catch (e) {
             console.log(e);
-            await downloadShopeeSitemap();
+            await downloadFile('http://sitemap.shopee.vn/sitemap.xml', shopeeSitemapPath);
         }
 
         let shopeeSitemapReaderStream: ReadStream;

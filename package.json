@@ -1,7 +1,7 @@
 {
     "name": "ecommerce-data-crawler",
     "version": "1.0.0",
-    "description": "",
+    "description": "crawling data from shopee",
     "main": "dist/index.js",
     "scripts": {
         "start": "tsc && node dist/app.js",

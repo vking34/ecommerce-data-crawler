@@ -44,7 +44,7 @@ const downloadSitemaps = (productSitemapQueue: string[], pathQueue: string[]) =>
             }
 
             url = productSitemapQueue.shift();
-            await sleep(1000);
+            await sleep(200);
         }
 
         resolve(1);

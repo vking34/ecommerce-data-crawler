@@ -25,15 +25,20 @@ export const downloadFile = async (url: string, filePath: string) => {
 export const downloadSitemap = async (url: string, filePath: string) => {
     const gunzip = createGunzip();
     const fileWriteStream = createWriteStream(filePath);
-    const response = await axios({
-        url,
-        method: 'GET',
-        responseType: 'stream',
-        // timeout: 30000
-    });
+    try {
+        const response = await axios({
+            url,
+            method: 'GET',
+            responseType: 'stream',
+            timeout: 25000
+        });
 
-    await pipe(response.data, gunzip, fileWriteStream);
-    fileWriteStream.close();
+        await pipe(response.data, gunzip, fileWriteStream);
+    }
+    catch (e) {
+        fileWriteStream.close();
+        fs.unlink(filePath, (e) => { console.log('can not delete:', filePath, ' because:', e); });
+    }
 }
 
 export const sleep = (ms: number) => {

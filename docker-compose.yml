@@ -12,20 +12,18 @@ services:
       - "27017:27017"
     volumes:
       - "mongodb_data:/chozoi/mongodb"
-
-  app:
-    container_name: ecommerce-crawler
-    build: .
-    # image: "ecommerce-crawler:v1"
-    environment:
-      - PORT=3003
-      - MONGODB_URI=mongodb://mongodb:27017/cz-crawl-data
-      - SHOPEE_API=http://shopee.vn/api
-    ports:
-      - "3003:3003"
-
-    depends_on:
-      - mongodb
+  # app:
+  #   container_name: ecommerce-crawler
+  #   build: .
+  #   # image: "ecommerce-crawler:v1"
+  #   environment:
+  #     - PORT=3003
+  #     - MONGODB_URI=mongodb://mongodb:27017/cz-crawl-data
+  #     - SHOPEE_API=http://shopee.vn/api
+  #   ports:
+  #     - "3003:3003"
+  #   depends_on:
+  #     - mongodb
 
 volumes:
   mongodb_data:

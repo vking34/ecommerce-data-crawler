@@ -12,7 +12,12 @@ const server = http.createServer(app);
 
 
 // db
-monogoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoSettings = {
+    autoIndex: process.env.AUTO_INDEX === 'true' ? true : false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+};
+monogoose.connect(process.env.MONGODB_URI, mongoSettings);
 monogoose.Promise = global.Promise;
 monogoose.connection.once('open', () => {
     console.log('Connected to mongoDB!');
@@ -37,6 +42,7 @@ import crawl from './tasks/index';
 crawl();
 
 // import crawlProductList from './tasks/productListCrawler';
+// import { Mongoose } from 'mongoose';
 // crawlProductList('/home/user/Desktop/cz/crawler/sitemaps/sitemap.items-596.xml');
 
 

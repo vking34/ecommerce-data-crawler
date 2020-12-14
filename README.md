@@ -8,6 +8,8 @@
 
 
 ## Todos
+- Crawl INIT and PROCESSING shops.
+- Retry fail products, shops.
 - Run more async (parallel) tasks for crawling 
 - Schedule the crawling task repetitively.
 - Save the running checkpoint. So the app can run from the stopping point of the previous execution.

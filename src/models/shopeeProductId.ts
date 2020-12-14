@@ -14,7 +14,6 @@ const shopeeProductIdSchema: Schema = new mongoose.Schema(
         shop_id: String
     },
     {
-        // strict: false,  // ! save all passed values, no strict to schema. default: true
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
     }
 );

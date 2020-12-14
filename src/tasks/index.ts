@@ -1,22 +1,20 @@
 import fs, { ReadStream, Stats } from 'fs';
 import path from 'path';
-import util from 'util';
-import { downloadFile } from '../utils/common';
+import { downloadFile, getFileStat } from '../utils/common';
 import xmlFlow from 'xml-flow';
 import { Sitemap } from '../interfaces/shopee';
-import crawlShopSitemap from './shopSitemapCrawler';
+// import crawlShopSitemap from './shopSitemapCrawler';
 import crawlProducts from './productSitemapCrawler';
-import crawlShops from './shopListCrawler';
-import crawlCategorySitemap from './categorySitemapCrawler';
-import crawlCategories from './categoryListCrawler';
+// import crawlShops from './shopListCrawler';
+// import crawlCategorySitemap from './categorySitemapCrawler';
+// import crawlCategories from './categoryListCrawler';
 
 export const rootPath: string = process.cwd();
 export const sitemapPath = path.join(rootPath, 'sitemaps')
 const shopeeSitemap = 'shopee.sitemap.xml';
 const shopeeSitemapPath = path.join(sitemapPath, shopeeSitemap);
-const getFileStat = util.promisify(fs.stat);
 
-
+// TODO: re-enable crawling shop
 export default () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -54,35 +52,36 @@ export default () => {
             return;
         }
 
-        const shopSitemapQueue: string[] = [];
+        // const shopSitemapQueue: string[] = [];
         const productSitemapQueue: string[] = [];
-        const categorySitemapQueue: string[] = [];
+        // const categorySitemapQueue: string[] = [];
         let xmlStream = xmlFlow(shopeeSitemapReaderStream);
 
         xmlStream.on('tag:sitemap', async (sitemap: Sitemap) => {
             const location = sitemap.loc;
-            if(location.includes('categories')){
-                const catSitemapPath = await crawlCategorySitemap(location);
-                categorySitemapQueue.push(catSitemapPath)
-
-            }
-            else if (location.includes('shops')) {
-                const shopSitemapPath: string = await crawlShopSitemap(location);
-                shopSitemapQueue.push(shopSitemapPath);
-                console.log(shopSitemapQueue)
-    
-            }
-            else if (location.includes('items')) {
+            if (location.includes('items')) {
                 productSitemapQueue.push(location);
             }
             
+            // else if (location.includes('shops')) {
+            //     const shopSitemapPath: string = await crawlShopSitemap(location);
+            //     shopSitemapQueue.push(shopSitemapPath);
+            //     console.log(shopSitemapQueue)
+    
+            // }
+
+            // else if(location.includes('categories')){
+            //     const catSitemapPath = await crawlCategorySitemap(location);
+            //     categorySitemapQueue.push(catSitemapPath)
+
+            // }
         });
 
         xmlStream.on('end', () => {
             shopeeSitemapReaderStream.close();
-            crawlShops(categorySitemapQueue);
+            // crawlShops(categorySitemapQueue);
             crawlProducts(productSitemapQueue);
-            crawlCategories(categorySitemapQueue);
+            // crawlCategories(categorySitemapQueue);
         });
 
         resolve(1);

@@ -31,13 +31,12 @@ const saveProductIdList = (productSitemapPath: string) => {
                 readStream.close();
                 let product: ProductId = productQueue.shift();
                 while (product) {
-                    console.log(product._id);
-                    
                     try {
                         await ShopeeProductIdModel.create(product);
+                        // console.log('new product:', product._id);
                     }
                     catch (e) {
-                        console.log(product._id, 'can not save:', e);
+                        // console.log('existing product:', product._id);
                     }
                     product = productQueue.shift();
                 }

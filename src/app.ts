@@ -40,8 +40,12 @@ app.use('/v1/crawlers/shops', shopRoute);
 app.use('/v1/crawlers/shopee/shops', shopeeShopRoute);
 
 // crawler
-// import crawl from './tasks/index';
-// crawl();
+import crawl from './tasks/index';
+crawl();
+
+// TODO: Crawl INIT and PROCESSING shops.
+// TODO: Retry fail products, shops.
+
 //------------------------------
 // import mainKafka from './avro-kafka/index';
 // mainKafka()
@@ -58,6 +62,6 @@ server.listen(port, () => {
 
 // handle uncaught exceptions
 process.on('uncaughtException', err => {
-    console.error('There was an uncaught error', err)
+    console.error('There was an uncaught error', err);
     // process.exit(1) //mandatory (as per the Node.js docs)
 })

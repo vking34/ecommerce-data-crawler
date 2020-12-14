@@ -8,7 +8,7 @@ import ShopeeShopModel from '../models/shopeeShop';
 
 const router: Router = express.Router();
 
-router.post('', (req: Request, resp: Response) => {
+router.post('/products', (req: Request, resp: Response) => {
     const shopLink = new URL(req.body.shop);
     const shopName = shopLink.pathname.substring(1);
 
@@ -83,7 +83,7 @@ router.post('', (req: Request, resp: Response) => {
                 }
             }
         }).catch((_e) => {
-            // resp.status(400).send(INVALID_SHOP_LINK);
+            
             console.log('can not get shop detail:', _e);
         });
 });

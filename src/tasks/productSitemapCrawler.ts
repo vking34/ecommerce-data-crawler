@@ -1,9 +1,9 @@
-import { downloadSitemap, getFileStat, sleep } from '../utils/common';
+import { downloadSitemap, getFileStat } from '../utils/common';
 import { sitemapPath } from './index';
 import path from 'path';
 import { Stats } from 'fs';
-import crawlProductList from './productListCrawler';
-
+// import crawlProductList from './productListCrawler';
+import saveProductIds from './productIdSaver';
 
 
 const downloadSitemaps = (productSitemapQueue: string[], pathQueue: string[]) => {
@@ -44,7 +44,7 @@ const downloadSitemaps = (productSitemapQueue: string[], pathQueue: string[]) =>
             }
 
             url = productSitemapQueue.shift();
-            await sleep(1000);
+            // await sleep(200);
         }
 
         resolve(1);
@@ -55,11 +55,13 @@ const downloadSitemaps = (productSitemapQueue: string[], pathQueue: string[]) =>
 export default async (productSitemapQueue: string[]) => {
     let pathQueue: string[] = [];
     await downloadSitemaps(productSitemapQueue, pathQueue);
-    let productSitemapPath: string = pathQueue.shift();
+    await saveProductIds(pathQueue);
 
-    while (productSitemapPath) {
-        console.log('productSitemapPath:', productSitemapPath);
-        await crawlProductList(productSitemapPath);
-        productSitemapPath = productSitemapQueue.shift();
-    }
+
+    // let productSitemapPath: string = pathQueue.shift();
+    // while (productSitemapPath) {
+    //     console.log('productSitemapPath:', productSitemapPath);
+    //     await crawlProductList(productSitemapPath);
+    //     productSitemapPath = productSitemapQueue.shift();
+    // }
 }

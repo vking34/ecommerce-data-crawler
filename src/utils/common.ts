@@ -6,8 +6,8 @@ import { createWriteStream } from 'fs';
 import fs from 'fs';
 
 const pipe = promisify(pipeline);
-export const downloadSitemap = async (url: string, filePath: string) => {
-    const gunzip = createGunzip();
+
+export const downloadFile = async (url: string, filePath: string) => {
     const fileWriteStream = createWriteStream(filePath);
     const response = await axios({
         url,
@@ -16,8 +16,32 @@ export const downloadSitemap = async (url: string, filePath: string) => {
         // timeout: 30000
     });
 
-    await pipe(response.data, gunzip, fileWriteStream);
-    fileWriteStream.close();
+    response.data.pipe(fileWriteStream);
+    response.data.on('end', () => { // always close stream
+        fileWriteStream.close();
+    })
+}
+
+export const downloadSitemap = async (url: string, filePath: string) => {
+    
+    
+    const gunzip = createGunzip();
+    const fileWriteStream = createWriteStream(filePath);
+    try {
+        const response = await axios({
+            url,
+            method: 'GET',
+            responseType: 'stream',
+            timeout: 25000
+        });
+
+        await pipe(response.data, gunzip, fileWriteStream);
+        console.log('zip...')
+    }
+    catch (e) {
+        fileWriteStream.close();
+        fs.unlink(filePath, (e) => { console.log('can not delete:', filePath, ' because:', e); });
+    }
 }
 
 export const sleep = (ms: number) => {

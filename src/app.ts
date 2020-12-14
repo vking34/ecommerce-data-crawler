@@ -12,7 +12,12 @@ const server = http.createServer(app);
 
 
 // db
-monogoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const mongoSettings = {
+    autoIndex: process.env.AUTO_INDEX === 'true' ? true : false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+};
+monogoose.connect(process.env.MONGODB_URI, mongoSettings);
 monogoose.Promise = global.Promise;
 monogoose.connection.once('open', () => {
     console.log('Connected to mongoDB!');
@@ -28,15 +33,21 @@ app.use(cors());
 // routes
 import productRoute from './routes/product';
 import shopRoute from './routes/shop';
+import shopeeShopRoute from './routes/shopee/shop';
 
 app.use('/v1/crawlers/products', productRoute);
 app.use('/v1/crawlers/shops', shopRoute);
+app.use('/v1/crawlers/shopee/shops', shopeeShopRoute);
 
 // crawler
-import crawl from './tasks/index';
-crawl();
+// import crawl from './tasks/index';
+// crawl();
+//------------------------------
+// import mainKafka from './avro-kafka/index';
+// mainKafka()
 
 // import crawlProductList from './tasks/productListCrawler';
+// import { Mongoose } from 'mongoose';
 // crawlProductList('/home/user/Desktop/cz/crawler/sitemaps/sitemap.items-596.xml');
 
 
@@ -48,5 +59,5 @@ server.listen(port, () => {
 // handle uncaught exceptions
 process.on('uncaughtException', err => {
     console.error('There was an uncaught error', err)
-    process.exit(1) //mandatory (as per the Node.js docs)
+    // process.exit(1) //mandatory (as per the Node.js docs)
 })

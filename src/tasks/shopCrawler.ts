@@ -4,7 +4,7 @@ import ShopeeShopModel from '../models/shopeeShop';
 
 
 const crawlShop = async (shopName: string) => {
-    // console.log(shopName);
+    
     try {
         let shop = await ShopeeShopModel.findById(shopName);
         if (shop === null) {

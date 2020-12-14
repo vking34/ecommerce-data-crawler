@@ -23,7 +23,7 @@ const crawlShopPromise = (shopSitemapPath: string) => {
                 let shopName: string = shopQueue.shift();
                 while (shopName) {
                     await crawlShop(shopName);
-                    await sleep(5000);
+                    await sleep(4000);
                     shopName = shopQueue.shift();
                 }
 
@@ -38,7 +38,7 @@ const crawlShopPromise = (shopSitemapPath: string) => {
 
 export default async (shopSiteMapQueue: string[]) => {
     let shopSitemapPath: string = shopSiteMapQueue.shift();
-    // console.log('get shop list:', shopSiteMapQueue);
+    console.log('get shop list:', shopSiteMapQueue);
     while (shopSitemapPath) {
         console.log(shopSitemapPath);
         await crawlShopPromise(shopSitemapPath);

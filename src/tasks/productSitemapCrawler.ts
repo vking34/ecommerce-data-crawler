@@ -29,7 +29,7 @@ const downloadSitemaps = (productSitemapQueue: string[], pathQueue: string[]) =>
                 }
                 else {
                     pathQueue.push(productSitemapPath);
-                    console.log('existed:', productSitemapPath);
+                    // console.log('existed:', productSitemapPath);
                 }
             }
             catch (e) {

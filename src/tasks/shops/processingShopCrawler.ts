@@ -1,5 +1,5 @@
 import ShopeeShopState from '../../models/shopeeShopState';
-import { crawlProductsByShopId } from '../../tasks/productsCrawler';
+import { crawlProductsByShopId } from '../productsCrawler';
 
 
 export default async () => {

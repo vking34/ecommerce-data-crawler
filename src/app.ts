@@ -44,11 +44,13 @@ import crawl from './tasks/index';
 crawl();
 
 // TODO: Crawl INIT and PROCESSING shops.
-import keepCrawl from './routes/shopee/crawler';
+import keepCrawl from './tasks/shops/processingShopCrawler';
 keepCrawl();
 // TODO: Retry fail products, shops.
 import retryFailProduct from "./tasks/products/failRetries";
 retryFailProduct();
+
+
 //------------------------------
 // import mainKafka from './avro-kafka/index';
 // mainKafka()

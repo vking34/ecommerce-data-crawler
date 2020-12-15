@@ -24,6 +24,7 @@ services:
   #     - "3003:3003"
   #   depends_on:
   #     - mongodb
+
   # zookeeper:
   #   image: confluentinc/cp-zookeeper:6.0.0
   #   hostname: zookeeper

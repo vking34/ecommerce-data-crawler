@@ -1,8 +1,32 @@
 import express, { Request, Response, Router } from 'express';
 import markAndCrawlShops from '../../tasks/shops/shopMarker';
+import ShopStateModel from '../../models/shopeeShopState';
 
 
 const router: Router = express.Router();
+
+router.get('', async (req: Request, resp: Response) => {
+    console.log('get shop states');
+    
+    const state = req.query.state;
+    let filters: any = {};
+    if(state) {
+        filters.state = state;
+    }
+    try {
+        const shops = await ShopStateModel.find(filters);
+        resp.send({
+            data: shops,
+            filters
+        });
+    }
+    catch (e) {
+        resp.send({
+            data: [],
+            filters
+        });
+    }
+});
 
 router.post('', (req: Request, resp: Response) => {
     const shopLinks: [string] = req.body.shops;
@@ -13,10 +37,6 @@ router.post('', (req: Request, resp: Response) => {
 
     markAndCrawlShops(shopLinks);
 })
-
-// router.get('', (req: Request, resp: Response) => {
-
-// });
 
 
 export default router;

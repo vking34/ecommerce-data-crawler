@@ -7,7 +7,7 @@
 2. __Robot.txt__: A robots.txt file tells search engine crawlers which pages or files the crawler can or can't request from your site. This is used mainly to avoid overloading your site with requests; it is not a mechanism for keeping a web page out of Google. To keep a web page out of Google, you should use noindex directives, or password-protect your page.
 
 ## API Docs
-
+- Rest API: https://documenter.getpostman.com/view/4640091/TVspjpNS
 
 ## Todos
 - Crawl INIT and PROCESSING shops.

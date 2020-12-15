@@ -15,6 +15,7 @@ router.get('', async (req: Request, resp: Response) => {
     }
     try {
         const shops = await ShopStateModel.find(filters);
+        filters.size = shops.length;
         resp.send({
             data: shops,
             filters

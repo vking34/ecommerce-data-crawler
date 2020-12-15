@@ -1,7 +1,7 @@
 import axios from "axios";
 import { SHOPEE_API } from '../constants/api';
 import ShopeeProductModel from '../models/shopeeProduct';
-
+import ShopeeProductId from "../models/shopeeProductId";
 
 export default (productId: string, shopId: string) => {
     return new Promise(async (resolve, _reject) => {
@@ -20,7 +20,7 @@ export default (productId: string, shopId: string) => {
                 }
                 catch (e) {
                     console.log('can not get:', productId);
-                    // TODO: mark fail product
+                    await ShopeeProductId.updateOne({ shop_id: shopId}, { state: "FAIL"});
                     resolve(0);
                 }
             }

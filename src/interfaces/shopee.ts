@@ -16,7 +16,8 @@ export interface ProductElement {
 export interface ProductId {
     _id: string,
     product_id: string,
-    shop_id: string
+    shop_id: string,
+    state: String
 }
 
 export interface ProductSitemapResult {

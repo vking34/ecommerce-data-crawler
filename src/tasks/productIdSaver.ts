@@ -18,13 +18,19 @@ const saveProductIdList = (productSitemapPath: string) => {
                 const partLength = urlParts.length;
                 const product_id: string = urlParts[partLength - 1];
                 // TODO: check if product id exists
-                const shop_id: string = urlParts[partLength - 2];
+                const check = ShopeeProductIdModel.find({ product_id: product_id});
+                if(!check) {
+                    const shop_id: string = urlParts[partLength - 2];
                 const product: ProductId = {
                     _id: `${shop_id}.${product_id}`,
                     product_id,
-                    shop_id
+                    shop_id,
+                    state: "INIT",
+                    
                 }
                 productQueue.push(product);
+                }
+                
             });
 
             xmlStream.on('end', async () => {

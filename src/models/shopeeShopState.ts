@@ -1,5 +1,7 @@
 import { Schema } from "mongoose";
 import mongoose from "./index";
+import mongoosePaginate from 'mongoose-paginate-v2';
+
 
 const ShoppeShopState: Schema = new mongoose.Schema(
     {
@@ -25,6 +27,8 @@ ShoppeShopState.index({username: 1});
 ShoppeShopState.on('index', e => {
     console.log('index error:', e);
 })
+ShoppeShopState.plugin(mongoosePaginate);
+
 
 export default mongoose.model('shopee_shop_state', ShoppeShopState);
 

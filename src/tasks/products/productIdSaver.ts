@@ -1,7 +1,7 @@
 import { ReadStream, createReadStream } from 'fs';
 import xmlFlow from 'xml-flow';
-import { ProductId } from '../interfaces/shopee';
-import ShopeeProductIdModel from '../models/shopeeProductId';
+import { ProductId } from '../../interfaces/shopee';
+import ShopeeProductIdModel from '../../models/shopeeProductId';
 
 const saveProductIdList = (productSitemapPath: string) => {
     return new Promise((resolve, _reject) => {

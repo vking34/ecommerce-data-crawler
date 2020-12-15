@@ -1,8 +1,8 @@
 import { ReadStream, createReadStream } from 'fs';
 import xmlFlow from 'xml-flow';
-import { sleep } from "../utils/common";
+import { sleep } from "../../utils/common";
 import crawlProduct from './productCrawler';
-import { ProductElement } from '../interfaces/shopee';
+import { ProductElement } from '../../interfaces/shopee';
 
 
 export default (productSitemapPath: string) => {

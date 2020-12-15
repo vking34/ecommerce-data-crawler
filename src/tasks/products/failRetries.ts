@@ -1,5 +1,5 @@
 import ShopeeProductId from "../../models/shopeeProductId";
-import saveProduct from '../productCrawler';
+import saveProduct from './productCrawler';
 
 export default () => {
     return new Promise(async (resolve, reject) => {

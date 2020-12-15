@@ -1,4 +1,4 @@
-import ShopeeCategoryModel from '../models/categoryShopee'
+import ShopeeCategoryModel from '../../models/categoryShopee'
 
 const crawlCategory =  async (categoryLink: string) => {
     

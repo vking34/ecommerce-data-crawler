@@ -4,7 +4,7 @@ import { downloadFile, getFileStat } from '../utils/common';
 import xmlFlow from 'xml-flow';
 import { Sitemap } from '../interfaces/shopee';
 // import crawlShopSitemap from './shopSitemapCrawler';
-import crawlProducts from './productSitemapCrawler';
+import crawlProducts from './products/productSitemapCrawler';
 // import crawlShops from './shopListCrawler';
 // import crawlCategorySitemap from './categorySitemapCrawler';
 // import crawlCategories from './categoryListCrawler';

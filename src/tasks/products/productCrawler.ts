@@ -1,7 +1,7 @@
 import axios from "axios";
-import { SHOPEE_API } from '../constants/api';
-import ShopeeProductModel from '../models/shopeeProduct';
-import ShopeeProductId from "../models/shopeeProductId";
+import { SHOPEE_API } from '../../constants/api';
+import ShopeeProductModel from '../../models/shopeeProduct';
+import ShopeeProductId from "../../models/shopeeProductId";
 
 export default (productId: string, shopId: string) => {
     return new Promise(async (resolve, _reject) => {

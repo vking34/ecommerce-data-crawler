@@ -1,4 +1,4 @@
-import ProductIdModel from '../models/shopeeProductId';
+import ProductIdModel from '../../models/shopeeProductId';
 import saveProduct from './productCrawler';
 
 

@@ -1,5 +1,5 @@
-import { downloadSitemap, getFileStat } from '../utils/common';
-import { sitemapPath } from './index';
+import { downloadSitemap, getFileStat } from '../../utils/common';
+import { sitemapPath } from '../index';
 import path from 'path';
 import { Stats } from 'fs';
 // import crawlProductList from './productListCrawler';

@@ -1,7 +1,7 @@
 import { existsSync } from 'fs';
 import path from 'path';
-import { sitemapPath } from './index';
-import { downloadSitemap } from '../utils/common';
+import { sitemapPath } from '../index';
+import { downloadSitemap } from '../../utils/common';
 
 
 export default async (shopSitemapLink: string) => {

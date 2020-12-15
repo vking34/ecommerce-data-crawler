@@ -11,7 +11,11 @@ const shopeeProductIdSchema: Schema = new mongoose.Schema(
             type: String,
             required: [true, 'Product ID is required!']
         },
-        shop_id: String
+        shop_id: String,
+        state: {
+            type: String,
+            default: 'INIT' // INIT, FAIL, SUCCESS
+        }
     },
     {
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }

@@ -1,7 +1,7 @@
 import xmlFlow from 'xml-flow';
 import crawlShop from './shopCrawler';
 import { ReadStream, createReadStream } from 'fs';
-import { sleep } from '../utils/common';
+import { sleep } from '../../utils/common';
 
 
 const shopQueue: string[] = [];

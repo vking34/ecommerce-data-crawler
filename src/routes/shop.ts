@@ -3,7 +3,7 @@ import { SHOPEE_API } from '../constants/api';
 import { INVALID_SHOP_LINK, SHOP_NOT_FOUND } from '../constants/response';
 import axios from 'axios';
 import ProductModel from '../models/product';
-import { crawlShopByUrl } from '../tasks/shopCrawler';
+import { crawlShopByUrl } from '../tasks/shops/shopCrawler';
 import ShopeeShopModel from '../models/shopeeShop';
 
 const router: Router = express.Router();

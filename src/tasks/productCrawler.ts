@@ -20,6 +20,7 @@ export default (productId: string, shopId: string) => {
                 }
                 catch (e) {
                     console.log('can not get:', productId);
+                    // TODO: mark fail product
                     resolve(0);
                 }
             }

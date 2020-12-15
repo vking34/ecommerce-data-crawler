@@ -1,6 +1,6 @@
-import { SHOPEE_API } from '../constants/api';
+import { SHOPEE_API } from '../../constants/api';
 import axios from 'axios';
-import ShopeeShopModel from '../models/shopeeShop';
+import ShopeeShopModel from '../../models/shopeeShop';
 
 
 const crawlShop = async (shopName: string) => {

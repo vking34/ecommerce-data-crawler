@@ -1,6 +1,7 @@
 import { SHOPEE_API } from '../../constants/api';
 import axios from 'axios';
 import ShopeeShopModel from '../../models/shopeeShop';
+import { regexPhone } from '../../utils/regexPhone';
 
 
 const crawlShop = async (shopName: string) => {
@@ -14,6 +15,9 @@ const crawlShop = async (shopName: string) => {
                 const shopDetailResponse = await axios.get(shopDetailUrl, { timeout: 4000 });
                 let shop = shopDetailResponse.data.data;
                 shop._id = shopName;
+                shop.phone = regexPhone(shop.description);
+                console.log(shop.phone);
+                
                 ShopeeShopModel.create(shop).catch(_e => { });
                 console.log('saving shop:', shopName);
             }

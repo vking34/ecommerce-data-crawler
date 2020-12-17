@@ -14,7 +14,6 @@ export const sitemapPath = path.join(rootPath, 'sitemaps')
 const shopeeSitemap = 'shopee.sitemap.xml';
 const shopeeSitemapPath = path.join(sitemapPath, shopeeSitemap);
 
-// TODO: re-enable crawling shop
 export default () => {
     return new Promise(async (resolve, reject) => {
         try {

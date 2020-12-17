@@ -23,7 +23,7 @@ const markShop = (shopLink: string, shopIds: string[]) => {
                     _id: shopId,
                     name: shopDetail.name,
                     username: shopName,
-                    phone_numbers: phoneNumers,
+                    phone_numbers: [...phoneNumers],
                     link: newLink,
                     state: 'INIT'
                 });

@@ -3,11 +3,19 @@ import mongoose from "./index";
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 
-const ShoppeShopState: Schema = new mongoose.Schema(
+const ShopState: Schema = new mongoose.Schema(
     {
         _id: {
             type: String,
-            required: [true , ' Id required!']
+            required: [true, 'Id required!']
+        },
+        shop_id: {
+            type: String,
+            required: [true, 'Shop Id required!']
+        },
+        platform: {
+            type: String,
+            required: [true, 'Platform required!']
         },
         name: String,
         username: String,
@@ -27,12 +35,13 @@ const ShoppeShopState: Schema = new mongoose.Schema(
     }
 )
 
-ShoppeShopState.index({username: 1});
-ShoppeShopState.on('index', e => {
+ShopState.index({ platform: 1, shop_id: 1 });
+ShopState.index({ platform: 1, username: 1 });
+ShopState.on('index', e => {
     console.log('index error:', e);
 })
-ShoppeShopState.plugin(mongoosePaginate);
+ShopState.plugin(mongoosePaginate);
 
 
-export default mongoose.model('shopee_shop_state', ShoppeShopState);
+export default mongoose.model('shopee_shop_state', ShopState);
 

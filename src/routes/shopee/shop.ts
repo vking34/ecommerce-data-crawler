@@ -1,6 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import markAndCrawlShops from '../../tasks/shops/shopMarker';
-import ShopStateModel from '../../models/shopeeShopState';
+import ShopStateModel from '../../models/shopState';
 
 
 const router: Router = express.Router();

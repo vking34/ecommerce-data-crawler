@@ -1,7 +1,8 @@
 import { getShopDetail } from '../../utils/shopee';
-import ShopeeShopState from '../../models/shopeeShopState';
+import ShopeeShopState from '../../models/shopState';
 import { crawlProductsByShopId } from '../products/productsCrawler';
 import filterPhoneNumbers from '../../utils/phoneNumberFilter';
+import { Platforms } from '../../constants/common';
 
 
 const markShop = (shopLink: string, shopIds: string[]) => {
@@ -20,7 +21,9 @@ const markShop = (shopLink: string, shopIds: string[]) => {
                 
                 shopIds.push(shopId);
                 ShopeeShopState.create({
-                    _id: shopId,
+                    _id: `${Platforms.shopee}.${shopId}`,
+                    shop_id: shopId,
+                    platform: Platforms.shopee,
                     name: shopDetail.name,
                     username: shopName,
                     phone_numbers: [...phoneNumers],
@@ -51,9 +54,9 @@ export default async (shopLinks: [string]) => {
     
     while (shopId) {
         console.log('Shop ID:', shopId);
-        await ShopeeShopState.updateOne({ _id: shopId }, { state: 'PROCESSING' });
+        await ShopeeShopState.updateOne({ shop_id: shopId }, { state: 'PROCESSING' });
         await crawlProductsByShopId(shopId);
-        await ShopeeShopState.updateOne({ _id: shopId }, { state: 'DONE' });
+        await ShopeeShopState.updateOne({ shop_id: shopId }, { state: 'DONE' });
         shopId = shopIds.shift();
     }
 }

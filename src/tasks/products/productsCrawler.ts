@@ -1,11 +1,11 @@
 import ProductIdModel from '../../models/shopeeProductId';
 import saveProduct from './productCrawler';
-import ShopState from '../../models/shopeeShopState';
+import ShopState from '../../models/shopState';
 
 
 export const crawlProductsByShopId = async (shopId: string) => {
     try {
-        const shop = await ShopState.findById(shopId);
+        const shop = await ShopState.findOne({shop_id: shopId});
         let phoneNumbers = new Set(shop.phone_numbers);
         
         const productIds = await ProductIdModel.find({ shop_id: shopId });
@@ -16,7 +16,7 @@ export const crawlProductsByShopId = async (shopId: string) => {
             }
         }
         
-        await ShopState.updateOne({_id: shopId}, {phone_numbers: [...phoneNumbers]});
+        await ShopState.updateOne({shop_id: shopId}, {phone_numbers: [...phoneNumbers]});
     } catch (e) {
         console.log('can not products in shop:', shopId);
     }

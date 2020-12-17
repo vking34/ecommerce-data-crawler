@@ -1,4 +1,4 @@
-import ShopeeShopState from '../../models/shopeeShopState';
+import ShopeeShopState from '../../models/shopState';
 import { crawlProductsByShopId } from '../products/productsCrawler';
 
 

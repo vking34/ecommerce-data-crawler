@@ -11,13 +11,16 @@ const ShoppeShopState: Schema = new mongoose.Schema(
         },
         name: String,
         username: String,
-        phone: Object,
         link: String,
-        state: String,  // INIT, PROCESSING, DONE
+        state: String,      // INIT, PROCESSING, DONE
         updatable: {
             type: Boolean,
             default: true
-        }
+        },
+        phone_numbers: {
+            type: Array,
+            default: []
+        },
     },
     {
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }

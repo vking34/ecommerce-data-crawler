@@ -7,11 +7,10 @@ const ShopeeShopSchema: Schema = new mongoose.Schema(
             type: String,
             required: [true, 'Shop ID is required!']
         },
-        phone: {
-            type: String,
-            default:"none"
+        phone_numbers: {
+            type: Array,
+            default: []
         }
-
     },
     {
         strict: false,  // ! save all passed values, no strict to schema. default: true

@@ -1,7 +1,7 @@
 import { getShopDetail } from '../../utils/shopee';
 import ShopeeShopState from '../../models/shopeeShopState';
 import { crawlProductsByShopId } from '../products/productsCrawler';
-import { regexPhone } from '../../utils/regexPhone';
+import filterPhoneNumbers from '../../utils/phoneNumberFilter';
 
 
 const markShop = (shopLink: string, shopIds: string[]) => {
@@ -15,15 +15,15 @@ const markShop = (shopLink: string, shopIds: string[]) => {
                 const shopDetail = await getShopDetail(shopName);
                 const shopId: string = shopDetail.shopid;
                 const newLink: string = `https://${shopUrl.hostname}${shopUrl.pathname}`;
-                const phoneNumer = regexPhone(shopDetail.description)
-                console.log('-------',phoneNumer);
+                const phoneNumers = filterPhoneNumbers(shopDetail.description)
+                console.log('phone set:', phoneNumers);
                 
                 shopIds.push(shopId);
                 ShopeeShopState.create({
                     _id: shopId,
                     name: shopDetail.name,
                     username: shopName,
-                    phone: phoneNumer,
+                    phone_numbers: phoneNumers,
                     link: newLink,
                     state: 'INIT'
                 });

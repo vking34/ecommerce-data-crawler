@@ -40,6 +40,7 @@ app.use('/v1/crawlers/shops', shopRoute);
 app.use('/v1/crawlers/shopee/shops', shopeeShopRoute);
 
 // crawler
+// TODO: Schedule crawling tasks
 import crawl from './tasks/index';
 crawl();
 

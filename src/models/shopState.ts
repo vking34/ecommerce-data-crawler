@@ -43,5 +43,5 @@ ShopState.on('index', e => {
 ShopState.plugin(mongoosePaginate);
 
 
-export default mongoose.model('shopee_shop_state', ShopState);
+export default mongoose.model('shop_state', ShopState);
 

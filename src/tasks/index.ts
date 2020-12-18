@@ -5,7 +5,7 @@ import xmlFlow from 'xml-flow';
 import { Sitemap } from '../interfaces/shopee';
 import crawlShopSitemap from './shops/shopSitemapCrawler';
 //import crawlProducts from './products/productSitemapCrawler';
-import crawlShops from './shops/shopListCrawler';
+//import crawlShops from './shops/shopListCrawler';
 import crawlCategorySitemap from './categories/categorySitemapCrawler';
 //import crawlCategories from './categories/categoryListCrawler';
 
@@ -78,7 +78,7 @@ export default () => {
 
         xmlStream.on('end', () => {
             shopeeSitemapReaderStream.close();
-            crawlShops(shopSitemapQueue);
+          //  crawlShops(shopSitemapQueue);
           //  crawlProducts(productSitemapQueue);
           //  crawlCategories(categorySitemapQueue);
         });

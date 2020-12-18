@@ -3,7 +3,7 @@ import ShopeeShopState from '../../models/shopState';
 import { crawlProductsByShopId } from '../products/productsCrawler';
 import filterPhoneNumbers from '../../utils/phoneNumberFilter';
 import { Platforms } from '../../constants/common';
-
+import ChozoiShop from '../../models/chozoiShop';
 
 const markShop = (shopLink: string, shopIds: string[]) => {
     return new Promise(async (resolve, reject) => {
@@ -18,7 +18,14 @@ const markShop = (shopLink: string, shopIds: string[]) => {
                 const newLink: string = `https://${shopUrl.hostname}${shopUrl.pathname}`;
                 const phoneNumers = filterPhoneNumbers(shopDetail.description)
                 console.log('phone set:', phoneNumers);
-                
+                let portrait = '', cover = '';
+                if( shopDetail.account.portrait !== ''){
+                    portrait = `https://cf.shopee.vn/file/${shopDetail.account.portrait}_tn`
+                }
+                if( shopDetail.cover !== '')
+                {
+                    cover = `https://cf.shopee.vn/file/${shopDetail.cover}`;
+                }
                 shopIds.push(shopId);
                 ShopeeShopState.create({
                     _id: `${Platforms.shopee}.${shopId}`,
@@ -30,6 +37,16 @@ const markShop = (shopLink: string, shopIds: string[]) => {
                     link: newLink,
                     state: 'INIT'
                 });
+                ChozoiShop.create({
+                    _id: `${Platforms.shopee}.${shopId}`,
+                    username:shopDetail.account.username,
+                    phone_number: [...phoneNumers],
+                    name: shopDetail.name,
+                    img_avatar_url: portrait,
+                    img_cover_url: cover,
+                    description: shopDetail.description
+                })
+                
                 resolve(true);
             }
             else {

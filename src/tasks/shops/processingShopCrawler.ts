@@ -15,7 +15,6 @@ const crawl = async () => {
 
 export default () => {
     const cronExpress = '0 0 21 */2 * *';
-
     schedule.scheduleJob(cronExpress, function () {
         crawl();
     });

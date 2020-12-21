@@ -86,11 +86,4 @@ router.get('/shopee/:productId', async (req: Request, resp: Response) => {
 })
 
 
-router.post('/aaa', (req: Request, resp: Response) => {
-    const productId: string = req.body.productId;
-   
-        resp.send(productId);
- 
-});
-
 export default router;

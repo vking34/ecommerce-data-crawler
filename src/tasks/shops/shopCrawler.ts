@@ -2,7 +2,7 @@ import { SHOPEE_API } from '../../constants/api';
 import axios from 'axios';
 import ShopeeShopModel from '../../models/shopeeShop';
 import filterPhoneNumbers from '../../utils/phoneNumberFilter';
-
+import { Platforms } from '../../constants/common';
 
 const crawlShop = async (shopName: string) => {
     
@@ -14,7 +14,7 @@ const crawlShop = async (shopName: string) => {
             try {
                 const shopDetailResponse = await axios.get(shopDetailUrl, { timeout: 4000 });
                 let shop = shopDetailResponse.data.data;
-                shop._id = shopName;
+                shop._id = `${Platforms.shopee}.${shop.shop_id}`;
                 shop.phone_numbers = filterPhoneNumbers(shop.description);
                 
                 ShopeeShopModel.create(shop).catch(_e => { });

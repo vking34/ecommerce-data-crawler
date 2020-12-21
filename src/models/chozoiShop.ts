@@ -9,16 +9,20 @@ const ChozoiShop:  Schema = new mongoose.Schema(
             required: [true, 'Id required!']
         },
         username: String,
-        phone_number:{
+        name: String,
+        phone_numbers:{
             type: Array,
             default:[],
-        } ,
-        name: String,
+        },
+        phoneNumber: {
+            type: String,
+            default: '',
+        },
         email: {
             type: String,
             default: '',
         },  
-        contact_name: {
+        contactName: {
             type: String,
             default:''
         },
@@ -26,16 +30,17 @@ const ChozoiShop:  Schema = new mongoose.Schema(
             type: String,
             default:''
         },
-        img_avatar_url: {
+        imgAvatarUrl: {
             type: String,
-        
+            default: ''
         },
         img_description_urls: {
             type: String,
             default:''
         },
-        img_cover_url: {
+        imgCoverUrl: {
             type: String,
+            default: ''
         },
         description: String,
         

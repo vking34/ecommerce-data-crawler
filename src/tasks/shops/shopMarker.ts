@@ -40,10 +40,10 @@ const markShop = (shopLink: string, shopIds: string[]) => {
                 ChozoiShop.create({
                     _id: `${Platforms.shopee}.${shopId}`,
                     username:shopDetail.account.username,
-                    phone_number: [...phoneNumers],
+                    phone_numbers: [...phoneNumers],
                     name: shopDetail.name,
-                    img_avatar_url: portrait,
-                    img_cover_url: cover,
+                    imgAvatarUrl: portrait,
+                    imgCoverUrl: cover,
                     description: shopDetail.description
                 })
                 

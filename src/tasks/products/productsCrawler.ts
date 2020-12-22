@@ -4,10 +4,16 @@ import ShopState from '../../models/shopState';
 
 
 export const crawlProductsByShopId = async (shopId: string) => {
+    let phoneNumbers;
     try {
         const shop = await ShopState.findOne({shop_id: shopId});
-        let phoneNumbers = new Set(shop.phone_numbers);
-        
+        phoneNumbers = new Set(shop.phone_numbers);
+    }
+    catch (e) {
+        phoneNumbers = new Set();
+    }
+    
+    try {
         const productIds = await ProductIdModel.find({ shop_id: shopId });
         if (productIds) {
             for (let i = 0; i < productIds.length; i++) {

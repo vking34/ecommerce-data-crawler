@@ -33,14 +33,14 @@ const markShop = (shopLink: string, shopIds: string[]) => {
                     platform: Platforms.shopee,
                     name: shopDetail.name,
                     username: shopName,
-                    phone_numbers: [...phoneNumers],
+                    phone_numbers: phoneNumers,
                     link: newLink,
                     state: 'INIT'
                 });
                 ChozoiShop.create({
                     _id: `${Platforms.shopee}.${shopId}`,
                     username:shopDetail.account.username,
-                    phone_numbers: [...phoneNumers],
+                    phone_numbers: phoneNumers,
                     name: shopDetail.name,
                     imgAvatarUrl: portrait,
                     imgCoverUrl: cover,

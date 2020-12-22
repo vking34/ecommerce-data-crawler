@@ -2,11 +2,13 @@ import xmlFlow from 'xml-flow';
 import crawlShop from './shopCrawler';
 import { ReadStream, createReadStream } from 'fs';
 import { sleep } from '../../utils/common';
+import downloadSitemaps from './shopSitemapDownloader';
 
 
-const shopQueue: string[] = [];
-const crawlShopPromise = (shopSitemapPath: string) => {
+const crawlShopsPromise = (shopSitemapPath: string) => {
     return new Promise((resolve, reject) => {
+        console.log('crawling:', shopSitemapPath);
+        const shopQueue: string[] = [];
         try {
             let readStream: ReadStream = createReadStream(shopSitemapPath);
             readStream.setEncoding('utf8');
@@ -36,13 +38,14 @@ const crawlShopPromise = (shopSitemapPath: string) => {
     })
 }
 
+
 export default async (shopSiteMapQueue: string[]) => {
-    let shopSitemapPath: string = shopSiteMapQueue.shift();
-    console.log('get shop list:', shopSiteMapQueue);
+    const pathQueue: string[] = [];
+    await downloadSitemaps(shopSiteMapQueue, pathQueue);
+    // console.log('shop list:', pathQueue);
+    let shopSitemapPath = pathQueue.shift();
     while (shopSitemapPath) {
-        console.log(shopSitemapPath);
-        await crawlShopPromise(shopSitemapPath);
-        console.log('next shop path...')
-        shopSitemapPath = shopSiteMapQueue.shift();
-    };
+        await crawlShopsPromise(shopSitemapPath);
+        shopSitemapPath = pathQueue.shift();
+    }
 }

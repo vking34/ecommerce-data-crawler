@@ -23,8 +23,6 @@ export const downloadFile = async (url: string, filePath: string) => {
 }
 
 export const downloadSitemap = async (url: string, filePath: string) => {
-    
-    
     const gunzip = createGunzip();
     const fileWriteStream = createWriteStream(filePath);
     try {
@@ -36,7 +34,6 @@ export const downloadSitemap = async (url: string, filePath: string) => {
         });
 
         await pipe(response.data, gunzip, fileWriteStream);
-        console.log('zip...')
     }
     catch (e) {
         fileWriteStream.close();

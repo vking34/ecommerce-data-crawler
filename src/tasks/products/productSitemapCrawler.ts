@@ -36,7 +36,7 @@ const downloadSitemaps = (productSitemapQueue: string[], pathQueue: string[]) =>
                 try {
                     await downloadSitemap(url, productSitemapPath);
                     pathQueue.push(productSitemapPath);
-                    console.log('downloaded:', productSitemapPath);
+                    // console.log('downloading:', productSitemapPath);
                 }
                 catch (e) {
                     console.log(e);

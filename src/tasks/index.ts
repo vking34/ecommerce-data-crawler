@@ -3,11 +3,11 @@ import path from 'path';
 import { downloadFile, getFileStat } from '../utils/common';
 import xmlFlow from 'xml-flow';
 import { Sitemap } from '../interfaces/shopee';
-import crawlShopSitemap from './shops/shopSitemapCrawler';
+// import crawlShopSitemap from './shops/shopSitemapCrawler';
 import crawlProducts from './products/productSitemapCrawler';
 import crawlShops from './shops/shopListCrawler';
 // import crawlCategorySitemap from './categories/categorySitemapCrawler';
-//import crawlCategories from './categories/categoryListCrawler';
+// import crawlCategories from './categories/categoryListCrawler';
 
 export const rootPath: string = process.cwd();
 export const sitemapPath = path.join(rootPath, 'sitemaps')
@@ -63,8 +63,8 @@ export default () => {
             }
 
             else if (location.includes('shops')) {
-                const shopSitemapPath: string = await crawlShopSitemap(location);
-                shopSitemapQueue.push(shopSitemapPath);
+                // const shopSitemapPath: string = await crawlShopSitemap(location);
+                shopSitemapQueue.push(location);
             }
 
             // else if (location.includes('categories')) {

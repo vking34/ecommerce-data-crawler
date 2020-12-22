@@ -3,7 +3,7 @@ const phoneNumberFilter = /\D/g;
 
 export const filterMorePhoneNumbers = (description: string, phoneNumSet) => {
     let phoneMatches = description.match(phoneNumberRegex);
-    if(phoneMatches){
+    if (phoneMatches) {
         phoneMatches.forEach(phone => {
             phoneNumSet.add(phone.replace(phoneNumberFilter, ''));
         });
@@ -12,13 +12,19 @@ export const filterMorePhoneNumbers = (description: string, phoneNumSet) => {
 
 export default (description: string) => {
     let phoneNumSet = new Set();
-    let phoneMatches = description.match(phoneNumberRegex);
+    let phoneMatches;
+    try {
+        phoneMatches = description.match(phoneNumberRegex);
+    }
+    catch (_e) {
+        return [];
+    }
 
-    if(phoneMatches){
+    if (phoneMatches) {
         phoneMatches.forEach(phone => {
             phoneNumSet.add(phone.replace(phoneNumberFilter, ''));
         });
     }
 
-    return phoneNumSet;
+    return [...phoneNumSet];
 };

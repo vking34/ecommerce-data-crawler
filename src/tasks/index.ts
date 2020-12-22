@@ -4,9 +4,9 @@ import { downloadFile, getFileStat } from '../utils/common';
 import xmlFlow from 'xml-flow';
 import { Sitemap } from '../interfaces/shopee';
 import crawlShopSitemap from './shops/shopSitemapCrawler';
-//import crawlProducts from './products/productSitemapCrawler';
+import crawlProducts from './products/productSitemapCrawler';
 import crawlShops from './shops/shopListCrawler';
-import crawlCategorySitemap from './categories/categorySitemapCrawler';
+// import crawlCategorySitemap from './categories/categorySitemapCrawler';
 //import crawlCategories from './categories/categoryListCrawler';
 
 export const rootPath: string = process.cwd();
@@ -53,7 +53,7 @@ export default () => {
 
         const shopSitemapQueue: string[] = [];
         const productSitemapQueue: string[] = [];
-        const categorySitemapQueue: string[] = [];
+        // const categorySitemapQueue: string[] = [];
         let xmlStream = xmlFlow(shopeeSitemapReaderStream);
 
         xmlStream.on('tag:sitemap', async (sitemap: Sitemap) => {
@@ -67,16 +67,16 @@ export default () => {
                 shopSitemapQueue.push(shopSitemapPath);
             }
 
-            else if (location.includes('categories')) {
-                const catSitemapPath = await crawlCategorySitemap(location);
-                categorySitemapQueue.push(catSitemapPath)
-            }
+            // else if (location.includes('categories')) {
+            //     const catSitemapPath = await crawlCategorySitemap(location);
+            //     categorySitemapQueue.push(catSitemapPath)
+            // }
         });
 
         xmlStream.on('end', () => {
             shopeeSitemapReaderStream.close();
             crawlShops(shopSitemapQueue);
-            //  crawlProducts(productSitemapQueue);
+            crawlProducts(productSitemapQueue);
             //  crawlCategories(categorySitemapQueue);
         });
 

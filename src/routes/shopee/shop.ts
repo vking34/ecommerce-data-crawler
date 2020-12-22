@@ -4,11 +4,14 @@ import ShopStateModel from '../../models/shopState';
 import ChozoiShopModel from '../../models/chozoiShop';
 import ShopeeShopModel from '../../models/shopeeShop'
 import axios from 'axios';
+import { CHOZOI_API } from '../../constants/api';
 // import { markProduct } from '../../utils/shopee';
 const router: Router = express.Router();
 
 // get raw shops
 router.get('/raw', (req: Request, resp: Response) => {
+    console.log(CHOZOI_API);
+    
     let filters: any = {};
     try {
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
@@ -129,25 +132,29 @@ router.post('/approve', async (req: Request, resp: Response) => {
             imgCoverUrl: shop.imgCoverUrl,
             description: shop.description
         }
-        await axios({
-            method: 'post',
-            url: 'https://api.chozoi.com/v1/auth/create_account',
-            data: data
-        })
-            .then(function (response) {
-
+       
+    //    markProduct(shopId);
+        try{
+          const response =  await axios({
+                method: 'post',
+                url: `${CHOZOI_API}/v1/auth/create_account`,
+                data: data
+            })
+            if(response){
                 resp.send({
                     status: true,
-                    response: response
+                    data: response
                 })
+            }
+        }
+        catch(e){
+            resp.send({
+                status: false,
+                error: e
             })
-            .catch(function (error) {
-
-                resp.send({
-                    status: false,
-                    error: error
-                });
-            });
+            
+        }
+         
     }
     catch (e) {
         console.log(e);
@@ -203,7 +210,12 @@ router.post('', (req: Request, resp: Response) => {
 
 // approve shop, product to chozoi
 
-
+router.post('/testproduct', (req: Request, resp: Response) => {
+    const shopLinks = req.body.productId;
+    resp.send({
+        productId: shopLinks
+    });
+})
 
 
 

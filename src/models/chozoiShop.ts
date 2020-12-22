@@ -14,34 +14,13 @@ const ChozoiShop:  Schema = new mongoose.Schema(
             type: Array,
             default:[],
         },
-        phoneNumber: {
-            type: String,
-            default: '',
-        },
-        email: {
-            type: String,
-            default: '',
-        },  
-        contactName: {
-            type: String,
-            default:''
-        },
-        page_url: {
-            type: String,
-            default:''
-        },
-        imgAvatarUrl: {
-            type: String,
-            default: ''
-        },
-        img_description_urls: {
-            type: String,
-            default:''
-        },
-        imgCoverUrl: {
-            type: String,
-            default: ''
-        },
+        phoneNumber:String,
+        email: String,
+        contactName: String,
+        page_url: String,
+        imgAvatarUrl: String,
+        img_description_urls: String,
+        imgCoverUrl: String,
         description: String,
         
 

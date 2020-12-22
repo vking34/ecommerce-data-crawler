@@ -3,7 +3,7 @@ import { SHOPEE_API } from '../../constants/api';
 import ShopeeProductModel from '../../models/shopeeProduct';
 import ShopeeProductId from "../../models/shopeeProductId";
 import { filterMorePhoneNumbers } from '../../utils/phoneNumberFilter';
-
+import { Platforms } from '../../constants/common';
 export const saveProduct = (productId: string, shopId: string) => {
     return new Promise(async (resolve, _reject) => {
         try {
@@ -47,6 +47,7 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                     const productResponse = await axios.get(productApiUrl, { timeout: 4000 });
                     let product = productResponse.data.item;
                     product._id = productId;
+                    product.platform = `${Platforms.shopee}.${product.shopid}`;
                     filterMorePhoneNumbers(product.description, phoneNumbers);
                     
                     ShopeeProductModel.create(product).catch(_e => { });

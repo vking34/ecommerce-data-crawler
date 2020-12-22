@@ -66,7 +66,7 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                         }
                     }
                     const category = {
-                         id: czCategory.cz_category_id
+                        id: czCategory.cz_category_id
                     }
                     let productChozoi = {
                         _id: product.itemid,
@@ -76,12 +76,13 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                         category: category,
                         variants: variants,
                     }
-                    console.log('------------------------------------', productChozoi);
+                    await ChozoiProductModel.create(productChozoi).catch(_e => {
+                        console.log(_e);
 
-                    await ChozoiProductModel.create(productChozoi).catch(_e => { });
+                    });
                     console.log('saving product:', productId);
                     resolve(1);
-                    
+
                 }
                 catch (e) {
                     console.log('can not get:', productId);

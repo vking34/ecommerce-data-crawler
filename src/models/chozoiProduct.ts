@@ -29,11 +29,11 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
         description_pickingout: String,
         category: Array,
         shipping_partner_ids: {
-            type: String,
+            type: Array,
             default: []
         },
         type: { 
-            type:String,
+            type: String,
             default: 'NORMAL'
         },
         condition: {

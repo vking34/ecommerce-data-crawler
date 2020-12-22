@@ -1,7 +1,7 @@
 import { ReadStream, createReadStream } from 'fs';
 import xmlFlow from 'xml-flow';
 import { sleep } from "../../utils/common";
-import crawlProduct from './productCrawler';
+import { saveProduct } from './productCrawler';
 import { ProductElement } from '../../interfaces/shopee';
 
 
@@ -27,7 +27,7 @@ export default (productSitemapPath: string) => {
                 readStream.close();
                 let product: ProductElement = productQueue.shift();
                 while (product) {
-                    await crawlProduct(product.productId, product.shopId);
+                    await saveProduct(product.productId, product.shopId);
                     await sleep(4000);
                     product = productQueue.shift();
                 }

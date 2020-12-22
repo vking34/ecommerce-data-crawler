@@ -17,14 +17,18 @@ services:
   #   build: .
   #   # image: "ecommerce-crawler:v1"
   #   environment:
-  #     - PORT=3003
-  #     - MONGODB_URI=mongodb://mongodb:27017/cz-crawl-data
-  #     - SHOPEE_API=http://shopee.vn/api
+  #     PORT: 3003
+  #     MONGODB_URI: mongodb://mongodb:27017/cz-crawl-data
+  #     SHOPEE_API: http://shopee.vn/api
+  #     AUTO_INDEX: "true"
   #   ports:
   #     - "3003:3003"
+  #   volumes:
+  #     - ./sitemaps:/app/sitemaps
   #   depends_on:
   #     - mongodb
-
+    
+    
   # zookeeper:
   #   image: confluentinc/cp-zookeeper:6.0.0
   #   hostname: zookeeper
@@ -34,7 +38,6 @@ services:
   #   environment:
   #     ZOOKEEPER_CLIENT_PORT: 2181
   #     ZOOKEEPER_TICK_TIME: 2000
-
   # broker:
   #   image: confluentinc/cp-server:6.0.0
   #   hostname: broker
@@ -63,7 +66,6 @@ services:
   #     CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
   #     CONFLUENT_METRICS_ENABLE: "true"
   #     CONFLUENT_SUPPORT_CUSTOMER_ID: "anonymous"
-
   # schema-registry:
   #   image: confluentinc/cp-schema-registry:6.0.0
   #   hostname: schema-registry

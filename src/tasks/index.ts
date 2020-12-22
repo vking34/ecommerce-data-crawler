@@ -5,7 +5,7 @@ import xmlFlow from 'xml-flow';
 import { Sitemap } from '../interfaces/shopee';
 import crawlShopSitemap from './shops/shopSitemapCrawler';
 //import crawlProducts from './products/productSitemapCrawler';
-//import crawlShops from './shops/shopListCrawler';
+import crawlShops from './shops/shopListCrawler';
 import crawlCategorySitemap from './categories/categorySitemapCrawler';
 //import crawlCategories from './categories/categoryListCrawler';
 
@@ -61,26 +61,23 @@ export default () => {
             if (location.includes('items')) {
                 productSitemapQueue.push(location);
             }
-            
+
             else if (location.includes('shops')) {
                 const shopSitemapPath: string = await crawlShopSitemap(location);
                 shopSitemapQueue.push(shopSitemapPath);
-                console.log(shopSitemapQueue)
-    
             }
 
-            else if(location.includes('categories')){
+            else if (location.includes('categories')) {
                 const catSitemapPath = await crawlCategorySitemap(location);
                 categorySitemapQueue.push(catSitemapPath)
-
             }
         });
 
         xmlStream.on('end', () => {
             shopeeSitemapReaderStream.close();
-          //  crawlShops(shopSitemapQueue);
-          //  crawlProducts(productSitemapQueue);
-          //  crawlCategories(categorySitemapQueue);
+            crawlShops(shopSitemapQueue);
+            //  crawlProducts(productSitemapQueue);
+            //  crawlCategories(categorySitemapQueue);
         });
 
         resolve(1);

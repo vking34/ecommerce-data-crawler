@@ -1,10 +1,10 @@
 import express, { Request, Response, Router } from 'express';
 import axios from "axios";
 import ProductModel from '../models/product';
-import ShopeeProductModel from '../models/shopeeProduct';
+// import ShopeeProductModel from '../models/shopeeProduct';
 import { PRODUCT_NOT_FOUND } from '../constants/response';
 import { SHOPEE_API } from '../constants/api';
-
+// import CategoriesMapModel from '../models/categoryMap'
 const router: Router = express.Router();
 
 router.post('', async (req: Request, resp: Response) => {
@@ -26,6 +26,7 @@ router.post('', async (req: Request, resp: Response) => {
         }
 
         if (!product) {
+            
             const productUrl = `${SHOPEE_API}/v2/item/get?itemid=${productId}&shopid=${shopId}`;
             console.log(productUrl);
 
@@ -71,19 +72,49 @@ router.get('/:productId', (req: Request, resp: Response) => {
 });
 
 
-router.get('/shopee/:productId', async (req: Request, resp: Response) => {
-    const productId: string = req.params.productId;
-    const product = await ShopeeProductModel.findById(productId);
-    if (!product) {
-        resp.status(400).send(PRODUCT_NOT_FOUND);
-        return;
-    }
+router.post('/awm', async (req: Request, resp: Response) => {
+    const productId: string = req.body.productId;
+    
+    const productApiUrl = productId;
+   
+        const productResponse = await axios.get(productApiUrl, { timeout: 4000 });
 
-    resp.send({
-        status: true,
-        product
-    });
-})
+        let product = productResponse.data.item;
+        // console.log('ddddddddddd', product.categories);
+        
+        const catShopee: string = product.categories[2].catid;
+        console.log(catShopee);
+        
+        // const catChozoi: any = await  CategoriesMapModel.findById({_id: catShopee})
+        // console.log('------------------',catChozoi);
+        
+        const imageProduct = product.images;
+        const variants = {
+            price: Number(product.price_before_discount)/10000,
+            sale_price: Number(product.price)/10000,
+            inventory: {
+                in_quantity: product.stock
+            }
+        }
+        console.log('varians',variants);
+        
+        const category = {
+            id: catShopee
+        }
+        let productChozoi = {
+            _id : product.itemid,
+            platform: `SHOPEE`,
+            name: product.name,
+            images: imageProduct,
+            category: category,
+            variants: variants,
+        }
+        console.log('0-0-00-0-0-0-0-',productChozoi);
+
+        resp.send(productChozoi)
+
+    }
+)
 
 
 export default router;

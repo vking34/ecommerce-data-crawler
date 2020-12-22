@@ -9,20 +9,29 @@ const ChozoiShop:  Schema = new mongoose.Schema(
             required: [true, 'Id required!']
         },
         username: String,
+        password: {
+            type: String,
+            default: 'chozoi123'
+        },
         name: String,
         phone_numbers:{
             type: Array,
             default:[],
         },
-        phoneNumber:String,
+        updatable: {
+            type: Boolean,
+            default: true
+        },
+        phone_number:String,
         email: String,
-        contactName: String,
+        contact_name: String,
         page_url: String,
-        imgAvatarUrl: String,
+        img_avatar_url: String,
         img_description_urls: String,
-        imgCoverUrl: String,
+        img_cover_url: String,
         description: String,
-        
+        link: String,
+        state: String,
 
     },
     {

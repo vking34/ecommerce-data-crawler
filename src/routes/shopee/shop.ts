@@ -5,7 +5,7 @@ import ChozoiShopModel from '../../models/chozoiShop';
 import ShopeeShopModel from '../../models/shopeeShop'
 import axios from 'axios';
 import { CHOZOI_API } from '../../constants/api';
-// import { markProduct } from '../../utils/shopee';
+import { markProduct } from '../../utils/shopee';
 const router: Router = express.Router();
 
 // get raw shops
@@ -124,16 +124,17 @@ router.post('/approve', async (req: Request, resp: Response) => {
         let shop = await ChozoiShopModel.findById({ _id: shopId })
         const data = {
             username: shop.username,
-            phoneNumber: shop.phoneNumber,
-            contactName: shop.contactName,
+            phoneNumber: shop.phone_number,
+            contactName: shop.contact_name,
             email: shop.email,
+            password: shop.password,
             name: shop.name,
-            imgAvatarUrl: shop.imgAvatarUrl,
-            imgCoverUrl: shop.imgCoverUrl,
+            imgAvatarUrl: shop.img_avatar_url,
+            imgCoverUrl: shop.img_cover_url,
             description: shop.description
         }
        
-    //    markProduct(shopId);
+       markProduct(shopId);
         try{
           const response =  await axios({
                 method: 'post',
@@ -210,12 +211,6 @@ router.post('', (req: Request, resp: Response) => {
 
 // approve shop, product to chozoi
 
-router.post('/testproduct', (req: Request, resp: Response) => {
-    const shopLinks = req.body.productId;
-    resp.send({
-        productId: shopLinks
-    });
-})
 
 
 

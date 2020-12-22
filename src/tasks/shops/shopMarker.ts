@@ -1,5 +1,4 @@
 import { getShopDetail } from '../../utils/shopee';
-import ShopeeShopState from '../../models/shopState';
 import { crawlProductsByShopId } from '../products/productsCrawler';
 import filterPhoneNumbers from '../../utils/phoneNumberFilter';
 import { Platforms } from '../../constants/common';
@@ -11,7 +10,7 @@ const markShop = (shopLink: string, shopIds: string[]) => {
         const shopName = shopUrl.pathname.substring(1);
 
         try {
-            const shopState: any = await ShopeeShopState.find({ username: shopName });
+            const shopState: any = await ChozoiShop.find({ username: shopName });
             if (shopState.length === 0) {
                 const shopDetail = await getShopDetail(shopName);
                 const shopId: string = shopDetail.shopid;
@@ -27,24 +26,16 @@ const markShop = (shopLink: string, shopIds: string[]) => {
                     cover = `https://cf.shopee.vn/file/${shopDetail.cover}`;
                 }
                 shopIds.push(shopId);
-                ShopeeShopState.create({
-                    _id: `${Platforms.shopee}.${shopId}`,
-                    shop_id: shopId,
-                    platform: Platforms.shopee,
-                    name: shopDetail.name,
-                    username: shopName,
-                    phone_numbers: phoneNumers,
-                    link: newLink,
-                    state: 'INIT'
-                });
                 ChozoiShop.create({
                     _id: `${Platforms.shopee}.${shopId}`,
                     username:shopDetail.account.username,
                     phone_numbers: phoneNumers,
                     name: shopDetail.name,
-                    imgAvatarUrl: portrait,
-                    imgCoverUrl: cover,
-                    description: shopDetail.description
+                    img_avatar_url: portrait,
+                    img_cover_url: cover,
+                    description: shopDetail.description,
+                    link: newLink,
+                    state: 'INIT'
                 })
                 
                 resolve(true);
@@ -71,9 +62,9 @@ export default async (shopLinks: [string]) => {
     
     while (shopId) {
         console.log('Shop ID:', shopId);
-        await ShopeeShopState.updateOne({ shop_id: shopId }, { state: 'PROCESSING' });
+        await ChozoiShop.updateOne({ shop_id: shopId }, { state: 'PROCESSING' });
         await crawlProductsByShopId(shopId);
-        await ShopeeShopState.updateOne({ shop_id: shopId }, { state: 'DONE' });
+        await ChozoiShop.updateOne({ shop_id: shopId }, { state: 'DONE' });
         shopId = shopIds.shift();
     }
 }

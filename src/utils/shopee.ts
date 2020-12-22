@@ -1,6 +1,6 @@
 import { SHOPEE_API } from '../constants/api';
 import axios from 'axios';
-import ShopeeProductModel from '../models/shopeeProduct'; 
+import ShopeeProductModel from '../models/chozoiProduct'; 
 import { sleep } from './common'
 export const getShopDetail = async (shopName: string) => {
     const shopDetailUrl = `${SHOPEE_API}/v4/shop/get_shop_detail?username=${shopName}`;
@@ -13,8 +13,8 @@ export const markProduct= async (shop) => {
    let productList = await ShopeeProductModel.find({ platform: shop});
    for(let i = 0; i <=productList.length; i++ ){
        const product = productList[i]
-         sleep(5000);
-        console.log(product.itemid);
+        await sleep(5000);
+        console.log(product._id);
         
    }
            

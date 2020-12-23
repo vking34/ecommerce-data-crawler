@@ -37,7 +37,7 @@ import shopeeShopRoute from './routes/shopee/shop';
 
 app.use('/v1/crawlers/products', productRoute);
 app.use('/v1/crawlers/shops', shopRoute);
-app.use('/v1/crawlers/shopee/shops', shopeeShopRoute);
+app.use('/v1/crawlers/shopee', shopeeShopRoute);
 
 // crawler
 // TODO: Schedule crawling tasks

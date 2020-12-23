@@ -38,6 +38,7 @@ const ChozoiShop:  Schema = new mongoose.Schema(
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
     }
 )
+
 ChozoiShop.plugin(mongoosePaginate);
 
 export default mongoose.model('chozoi_shops', ChozoiShop);

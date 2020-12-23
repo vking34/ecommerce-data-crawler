@@ -5,6 +5,8 @@ import ShopeeProductId from "../../models/shopeeProductId";
 import { filterMorePhoneNumbers } from '../../utils/phoneNumberFilter';
 import { Platforms } from '../../constants/common';
 import CategoriesMapModel from '../../models/categoryMap'
+
+
 export const saveProduct = (productId: string, shopId: string) => {
     return new Promise(async (resolve, _reject) => {
         try {
@@ -36,6 +38,7 @@ export const saveProduct = (productId: string, shopId: string) => {
         }
     });
 }
+
 
 export default (productId: string, shopId: string, phoneNumbers: any) => {
     return new Promise(async (resolve, reject) => {
@@ -70,24 +73,24 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                     }
                     let productChozoi = {
                         _id: product.itemid,
-                        platform: `${Platforms.shopee}.${shopId}`,
+                        shop_id: `${Platforms.shopee}.${shopId}`,
                         name: product.name,
                         images: imageProduct,
                         category: category,
                         variants: variants,
+                        platform: Platforms.shopee,
                     }
                     await ChozoiProductModel.create(productChozoi).catch(_e => {
                         console.log(_e);
-
                     });
                     console.log('saving product:', productId);
                     resolve(1);
 
                 }
                 catch (e) {
-                    console.log('can not get:', productId);
+                    console.log('can not get:', productId, e);
                     await ShopeeProductId.updateOne({ shop_id: shopId }, { state: "FAIL" });
-                    resolve(0);
+                    reject(e);
                 }
             }
             else {
@@ -96,7 +99,8 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
             }
         }
         catch (e) {
-            resolve(0);
+            console.log('can not get:', productId, e);
+            reject(e);
         }
     });
 }

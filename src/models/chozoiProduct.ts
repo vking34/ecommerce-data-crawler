@@ -7,26 +7,18 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
             type: String,
             required: [true, 'Product ID is required!']
         },
-        phone_numbers: {
-            type: Array,
-            default: [],
-        },
+        shop_id: String,
         name: String,
-        attributes:{
-            type: Array,
-            default: []
-        },
+        attributes: Array,
         packing_size:{
             type: Array,
-            default: []
+            default: [10, 10, 10]
         },
         images: {
             type: Array,
             default: []
         },
-        video: Array,
         description: String,
-        description_pickingout: String,
         category: Object,
         shipping_partner_ids: {
             type: Array,
@@ -44,11 +36,7 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
             type: Boolean,
             default: true
         },
-        weight: String,
-        is_pending: {
-            type: Boolean,
-            default: true
-        },
+        weight: Number,
         auto_public: {
             type: Boolean,
             default: true
@@ -65,7 +53,7 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
             type: String,
             required: [true, 'Platform required!']
         },
-        shipping_partner_code:{
+        shipping_partner_code: {
             type: String,
             default: "SELLER_EXPRESS"
         } 

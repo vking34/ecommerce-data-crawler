@@ -10,7 +10,7 @@ docker-compose.yml
 node_modules
 
 README.md
-sitemaps
+references
 
 zk-single-kafka-multiple
 sitemaps

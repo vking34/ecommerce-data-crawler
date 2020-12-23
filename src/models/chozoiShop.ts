@@ -32,7 +32,7 @@ const ChozoiShop:  Schema = new mongoose.Schema(
         description: String,
         link: String,
         state: String,
-
+        cz_shop_id: String
     },
     {
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }

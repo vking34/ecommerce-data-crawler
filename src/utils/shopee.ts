@@ -1,7 +1,8 @@
 import { SHOPEE_API } from '../constants/api';
 import axios from 'axios';
 import ShopeeProductModel from '../models/chozoiProduct'; 
-import { sleep } from './common'
+import { sleep } from './common';
+
 export const getShopDetail = async (shopName: string) => {
     const shopDetailUrl = `${SHOPEE_API}/v4/shop/get_shop_detail?username=${shopName}`;
     const response = await axios.get(shopDetailUrl);
@@ -22,6 +23,5 @@ export const markProduct= async (shop, access_token) => {
 
         
         
-   
    
 }

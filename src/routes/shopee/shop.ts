@@ -2,11 +2,8 @@ import express, { Request, Response, Router } from 'express';
 import markAndCrawlShops from '../../tasks/shops/shopMarker';
 import ChozoiShopModel from '../../models/chozoiShop';
 import ShopeeShopModel from '../../models/shopeeShop'
-import axios from 'axios';
-import { CHOZOI_API } from '../../constants/api';
-import { markProduct } from '../../utils/shopee';
-import { loginCZ } from '../../utils/czLogin';
 import convertShopByIds from '../../tasks/shops/rawShopConverterByIds';
+import approveShops from '../../tasks/shops/approveShops';
 
 
 const router: Router = express.Router();
@@ -74,6 +71,7 @@ router.post('raw-shops', (req: Request, resp: Response) => {
     markAndCrawlShops(shopLinks);
 })
 
+
 //get convertations shop
 router.get('/converted-shops', (req: Request, resp: Response) => {
     let filters: any = {};
@@ -131,53 +129,6 @@ router.get('/converted-shops', (req: Request, resp: Response) => {
 });
 
 
-// approve shop to chozoi
-router.post('/approve', async (req: Request, resp: Response) => {
-    const shopId = req.body.shop;
-    try {
-        const shop = await ChozoiShopModel.findById(shopId)
-        const data = {
-            username: shop.username,
-            phoneNumber: shop.phone_number,
-            contactName: shop.contact_name,
-            email: shop.email,
-            password: shop.password,
-            name: shop.name,
-            imgAvatarUrl: shop.img_avatar_url,
-            imgCoverUrl: shop.img_cover_url,
-            description: shop.description
-        }
-
-        try {
-            const response = await axios({
-                method: 'post',
-                url: `${CHOZOI_API}/v1/auth/create_account`,
-                data: data
-            })
-            console.log(response.statusText);
-            if (response.status == 200) {
-                const access_token = await loginCZ(shop.username, shop.password);
-                markProduct(shopId, access_token);
-
-            }
-            resp.send({
-                status: true,
-            })
-
-        }
-        catch (e) {
-            console.log(e);
-
-
-        }
-
-    }
-    catch (e) {
-        console.log(e);
-    }
-});
-
-
 // update shop model chozoishop
 router.put('/converted-shops/:shopId', async (req: Request, resp: Response) => {
     const shopId = req.params.shopId;
@@ -231,5 +182,16 @@ router.post('/converted-shops', async (req: Request, resp: Response) => {
 })
 
 
+// approve shops to chozoi
+router.post('/approved-shops', async (req: Request, resp: Response) => {
+    const shopIds: string[] = req.body.shop_ids;
+    
+    resp.send({
+        status: true,
+        message: 'Approving shops...'
+    });
+
+    approveShops(shopIds);
+});
 
 export default router;

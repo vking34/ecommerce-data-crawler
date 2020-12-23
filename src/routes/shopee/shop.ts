@@ -6,22 +6,23 @@ import axios from 'axios';
 import { CHOZOI_API } from '../../constants/api';
 import { markProduct } from '../../utils/shopee';
 import { loginCZ } from '../../utils/czLogin';
+import filterPhoneNumbers from '../../utils/phoneNumberFilter';
 const router: Router = express.Router();
 
 // get raw shops
-router.get('/raw', (req: Request, resp: Response) => {
+router.get('/raw-shops', (req: Request, resp: Response) => {
 
     let filters: any = {};
 
 
     try {
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
-        let limit:number =  req.query.page ? parseInt(req.query.limit as string): 10;
+        let limit: number = req.query.page ? parseInt(req.query.limit as string) : 10;
         let paginateOpts = {
             page,
             limit
         };
-       
+
         ShopeeShopModel.paginate(filters, paginateOpts)
             .then(shopResult => [
 
@@ -65,7 +66,7 @@ router.get('/raw', (req: Request, resp: Response) => {
 
 
 //get convertations shop
-router.get('/convertations', (req: Request, resp: Response) => {
+router.get('/converted-shop', (req: Request, resp: Response) => {
     let filters: any = {};
     const state = req.query.state;
     try {
@@ -74,7 +75,7 @@ router.get('/convertations', (req: Request, resp: Response) => {
         }
 
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
-        let limit: number = req.query.page ? parseInt(req.query.limit as string): 10;
+        let limit: number = req.query.page ? parseInt(req.query.limit as string) : 10;
         let paginateOpts = {
             page,
             limit
@@ -165,8 +166,8 @@ router.post('/approve', async (req: Request, resp: Response) => {
     }
 });
 // update shop model chozoishop
-router.post('/update', async (req: Request, resp: Response) => {
-    const shopId = req.body.shopId;
+router.put('/conveted-shops/:shopId', async (req: Request, resp: Response) => {
+    const shopId = req.params.shopId;
     const data = req.body.data;
     let filter = {
         _id: shopId
@@ -187,9 +188,9 @@ router.post('/update', async (req: Request, resp: Response) => {
 
 });
 
-router.get('/detailshop', async (req: Request, resp: Response) => {
+router.get('/conveted-shops/:shopId', async (req: Request, resp: Response) => {
 
-    const shopId = req.query.shopId;
+    const shopId = req.params.shopId;
     try {
         console.log(shopId);
 
@@ -207,8 +208,6 @@ router.get('/detailshop', async (req: Request, resp: Response) => {
 // crawler shop by shop link
 router.post('', (req: Request, resp: Response) => {
     const shopLinks: [string] = req.body.shops;
-    console.log(shopLinks);
-
     resp.send({
         status: true,
         message: 'Crawling shops...'
@@ -217,8 +216,68 @@ router.post('', (req: Request, resp: Response) => {
     markAndCrawlShops(shopLinks);
 })
 
-// crawler shop by
+// crawler shop by platform
+router.post('/raw-shops', async (req: Request, resp: Response) => {
+    const shopId: string = req.body.shop_id;
+    resp.send({
+        status: true,
+        message: 'Crawling shops...'
+    });
+    try {
+        const shopChozoi = await ChozoiShopModel.findById(shopId);
+        console.log('-----------------------------', shopChozoi);
 
+        if (shopChozoi == null) {
+            const result: any = await ShopeeShopModel.findById(shopId);
+            // [ '$__', 'isNew', 'errors', '$locals', '$op', '_doc', '$init' ]
+            let shopDetail = result._doc;
+            const newLink: string = `https://shopee.vn/${shopDetail.username}`;
+            const phoneNumers = filterPhoneNumbers(shopDetail.description)
+            console.log('phone set:', phoneNumers);
+            let portrait = '', cover = '';
+            if (shopDetail.account.portrait !== '') {
+                portrait = `https://cf.shopee.vn/file/${shopDetail.account.portrait}_tn`
+            }
+            if (shopDetail.cover !== '') {
+                cover = `https://cf.shopee.vn/file/${shopDetail.cover}`;
+            }
+
+            console.log({
+                _id: shopId,
+                username: shopDetail.account.username,
+                phone_numbers: phoneNumers,
+                name: shopDetail.name,
+                img_avatar_url: portrait,
+                img_cover_url: cover,
+                description: shopDetail.description,
+                link: newLink,
+                state: 'INIT'
+            });
+            
+            ChozoiShopModel.create({
+                _id: shopId,
+                username: shopDetail.account.username,
+                phone_numbers: phoneNumers,
+                name: shopDetail.name,
+                img_avatar_url: portrait,
+                img_cover_url: cover,
+                description: shopDetail.description,
+                link: newLink,
+                state: 'INIT'
+            })
+
+
+        }
+        else {
+            console.log('');
+
+        }
+    }
+    catch (e) {
+        console.log(shopId, ' can not save:', e);
+
+    }
+})
 
 
 

@@ -18,14 +18,14 @@ const crawlShop = async (shopName: string) => {
                 shop.phone_numbers = filterPhoneNumbers(shop.description);
                 
                 ShopeeShopModel.create(shop).catch(_e => { });
-                console.log('saving shop:', shopName);
+                // console.log('saving shop:', shopName);
             }
             catch (_e) {
                 console.log('can not get shop:', shopName, _e);
             }
         }
         else {
-            console.log('saved shop:', shopName);
+            // console.log('saved shop:', shopName);
         }
     }
     catch (e) {

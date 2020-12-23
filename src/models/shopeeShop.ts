@@ -4,6 +4,7 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 const ShopeeShopSchema: Schema = new mongoose.Schema(
     {
         _id: {
+            // SHOPEE.234213
             type: String,
             required: [true, 'Shop ID is required!']
         },

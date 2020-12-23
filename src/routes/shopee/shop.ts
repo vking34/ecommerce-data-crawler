@@ -170,7 +170,7 @@ router.get('/converted-shops/:shopId', async (req: Request, resp: Response) => {
 });
 
 
-// crawler shop by platform
+// crawl and convert shops by ids 
 router.post('/converted-shops', async (req: Request, resp: Response) => {
     const shopIds: string[] = req.body.shop_ids;
     resp.send({

@@ -5,6 +5,7 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 const ChozoiShop:  Schema = new mongoose.Schema(
     {
         _id: {
+            // SHOPEE.234213
             type: String,
             required: [true, 'Id required!']
         },

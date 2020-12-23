@@ -56,10 +56,13 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                         reject(new Error('Category of Product is not mapped'));
                     }
                     filterMorePhoneNumbers(product.description, phoneNumbers);
-                    const imageProduct = [];
+                    let images = [];
 
-                    product.images.map(item => {
-                        imageProduct.push(`https://cf.shopee.vn/file/${item}`)
+                    product.images.map((item, index) => {
+                        images.push({
+                            image_url: `https://cf.shopee.vn/file/${item}`,
+                            sort: index
+                        });
                     })
                     const variants = {
                         price: Number(product.price_before_discount) / 10000,
@@ -75,9 +78,9 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                         _id: product.itemid,
                         shop_id: `${Platforms.shopee}.${shopId}`,
                         name: product.name,
-                        images: imageProduct,
-                        category: category,
-                        variants: variants,
+                        images,
+                        category,
+                        variants,
                         platform: Platforms.shopee,
                     }
                     await ChozoiProductModel.create(productChozoi).catch(_e => {

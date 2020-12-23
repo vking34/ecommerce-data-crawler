@@ -14,6 +14,7 @@ const ShopeeShopSchema: Schema = new mongoose.Schema(
     },
     {
         strict: false,  // ! save all passed values, no strict to schema. default: true
+        // strictQuery: false,
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
     }
 );

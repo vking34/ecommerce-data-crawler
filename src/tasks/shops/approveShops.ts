@@ -10,7 +10,7 @@ export default (shopIds: string[]) => {
     shopIds.forEach(async shopId => {
         try {
             const shop = await ChozoiShopModel.findById(shopId)
-            // TODO: limit description length
+            const description: string = shop.description;
             const shopRequestData = {
                 username: shop.username,
                 phoneNumber: shop.phone_number ? shop.phone_number : shop.phone_numbers[0],
@@ -20,7 +20,7 @@ export default (shopIds: string[]) => {
                 name: shop.name,
                 imgAvatarUrl: shop.img_avatar_url,
                 imgCoverUrl: shop.img_cover_url,
-                description: shop.description
+                description: description.length < 251 ? description : description.substring(0, 249)
             }
             console.log(shopRequestData);
 
@@ -30,7 +30,7 @@ export default (shopIds: string[]) => {
                 if (response.status == 200) {
                     console.log(response.data);
                     const czShopId: string = response.data.shopId;
-                    await ChozoiShopModel.updateOne({_id: shopId}, {cz_shop_id: czShopId});
+                    await ChozoiShopModel.updateOne({ _id: shopId }, { cz_shop_id: czShopId });
                     const token = await loginCZ(shop.username, shop.password);
                     console.log(token);
                     await approveProducts(shopId, token);

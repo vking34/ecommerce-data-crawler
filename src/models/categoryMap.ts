@@ -3,7 +3,6 @@ import mongoose from './index';
 
 
 const CategoriesMapModel: Schema = new mongoose.Schema(
-
     {
         _id: {
             type: String,

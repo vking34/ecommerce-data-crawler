@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 import mongoose from './index';
-
+import mongoosePaginate from 'mongoose-paginate-v2';
 const ShopeeShopSchema: Schema = new mongoose.Schema(
     {
         _id: {
@@ -18,4 +18,6 @@ const ShopeeShopSchema: Schema = new mongoose.Schema(
     }
 );
 
+
+ShopeeShopSchema.plugin(mongoosePaginate);
 export default mongoose.model('shopee_shops', ShopeeShopSchema);

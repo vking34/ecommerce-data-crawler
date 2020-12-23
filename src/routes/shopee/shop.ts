@@ -1,28 +1,30 @@
 import express, { Request, Response, Router } from 'express';
 import markAndCrawlShops from '../../tasks/shops/shopMarker';
-import ShopStateModel from '../../models/shopState';
 import ChozoiShopModel from '../../models/chozoiShop';
 import ShopeeShopModel from '../../models/shopeeShop'
 import axios from 'axios';
 import { CHOZOI_API } from '../../constants/api';
 import { markProduct } from '../../utils/shopee';
+import { loginCZ } from '../../utils/czLogin';
 const router: Router = express.Router();
 
 // get raw shops
 router.get('/raw', (req: Request, resp: Response) => {
-    console.log(CHOZOI_API);
-    
+
     let filters: any = {};
+
+
     try {
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
-        let limit: number = req.query.page_size ? parseInt(req.query.page_size as string) : 10;
+        let limit:number =  req.query.page ? parseInt(req.query.limit as string): 10;
         let paginateOpts = {
             page,
             limit
         };
-
+       
         ShopeeShopModel.paginate(filters, paginateOpts)
             .then(shopResult => [
+
                 resp.send({
                     data: shopResult.docs,
                     filters,
@@ -72,13 +74,13 @@ router.get('/convertations', (req: Request, resp: Response) => {
         }
 
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
-        let limit: number = req.query.page_size ? parseInt(req.query.page_size as string) : 10;
+        let limit: number = req.query.page ? parseInt(req.query.limit as string): 10;
         let paginateOpts = {
             page,
             limit
         };
 
-        ShopStateModel.paginate(filters, paginateOpts)
+        ChozoiShopModel.paginate(filters, paginateOpts)
             .then(shopResult => [
                 resp.send({
                     data: shopResult.docs,
@@ -121,7 +123,7 @@ router.get('/convertations', (req: Request, resp: Response) => {
 router.post('/approve', async (req: Request, resp: Response) => {
     const shopId = req.body.shop;
     try {
-        let shop = await ChozoiShopModel.findById({ _id: shopId })
+        const shop = await ChozoiShopModel.findById(shopId)
         const data = {
             username: shop.username,
             phoneNumber: shop.phone_number,
@@ -133,29 +135,30 @@ router.post('/approve', async (req: Request, resp: Response) => {
             imgCoverUrl: shop.img_cover_url,
             description: shop.description
         }
-       
-       markProduct(shopId);
-        try{
-          const response =  await axios({
+
+        try {
+            const response = await axios({
                 method: 'post',
                 url: `${CHOZOI_API}/v1/auth/create_account`,
                 data: data
             })
-            if(response){
-                resp.send({
-                    status: true,
-                    data: response
-                })
+            console.log(response.statusText);
+            if (response.status == 200) {
+                const access_token = await loginCZ(shop.username, shop.password);
+                markProduct(shopId, access_token);
+
             }
-        }
-        catch(e){
             resp.send({
-                status: false,
-                error: e
+                status: true,
             })
-            
+
         }
-         
+        catch (e) {
+            console.log(e);
+
+
+        }
+
     }
     catch (e) {
         console.log(e);
@@ -184,10 +187,13 @@ router.post('/update', async (req: Request, resp: Response) => {
 
 });
 
-router.get('/detaishop:shopId', async (req: Request, resp: Response) => {
-    const shopId = req.params.shopId;
+router.get('/detailshop', async (req: Request, resp: Response) => {
+
+    const shopId = req.query.shopId;
     try {
-        const shop = await ChozoiShopModel.find({ _id: shopId })
+        console.log(shopId);
+
+        const shop = await ChozoiShopModel.findById(shopId)
         resp.send(shop)
 
     }
@@ -201,6 +207,8 @@ router.get('/detaishop:shopId', async (req: Request, resp: Response) => {
 // crawler shop by shop link
 router.post('', (req: Request, resp: Response) => {
     const shopLinks: [string] = req.body.shops;
+    console.log(shopLinks);
+
     resp.send({
         status: true,
         message: 'Crawling shops...'
@@ -209,7 +217,7 @@ router.post('', (req: Request, resp: Response) => {
     markAndCrawlShops(shopLinks);
 })
 
-// approve shop, product to chozoi
+// crawler shop by
 
 
 

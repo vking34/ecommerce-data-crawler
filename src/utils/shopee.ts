@@ -8,13 +8,14 @@ export const getShopDetail = async (shopName: string) => {
     return response.data.data;
 }
 
-export const markProduct= async (shop) => {
-
+export const markProduct= async (shop, access_token) => {
+    console.log(access_token);
+    
    let productList = await ShopeeProductModel.find({ platform: shop});
    for(let i = 0; i <=productList.length; i++ ){
        const product = productList[i]
         await sleep(5000);
-        console.log(product._id);
+        console.log(product);
         
    }
            

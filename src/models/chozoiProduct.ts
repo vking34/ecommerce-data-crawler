@@ -27,7 +27,7 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
         video: Array,
         description: String,
         description_pickingout: String,
-        category: Array,
+        category: Object,
         shipping_partner_ids: {
             type: Array,
             default: []
@@ -65,6 +65,10 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
             type: String,
             required: [true, 'Platform required!']
         },
+        shipping_partner_code:{
+            type: String,
+            default: "SELLER_EXPRESS"
+        } 
     },
     {
     

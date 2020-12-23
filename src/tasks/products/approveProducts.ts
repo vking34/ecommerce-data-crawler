@@ -16,7 +16,6 @@ export default async (shopeeShopId: string, czShopId: string, token: string) => 
             }
 
             czProducts.forEach(async product => {
-                console.log(product);
                 const productCreationUrl = `${CHOZOI_API}/v1/shops/${czShopId}/products/confirmation`;
                 try {
                     const response = await axios.post(productCreationUrl, product, requestConfig);

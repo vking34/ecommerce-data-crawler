@@ -17,7 +17,7 @@ export const saveProduct = (productId: string, shopId: string) => {
                 try {
                     const productResponse = await axios.get(productApiUrl, { timeout: 4000 });
                     let product = productResponse.data.item;
-                    let description = product.description;
+                    let description = product.description?.length > 2 ? product.description : product.name;
                     const catShopee = product.categories[2].catid;
                     const czCategory: any = await CategoriesMapModel.findById(catShopee);
                     if (!czCategory) {
@@ -90,7 +90,7 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                     const productResponse = await axios.get(productApiUrl, { timeout: 4000 });
                     let product = productResponse.data.item;
 
-                    let description = product.description;
+                    let description: string = product.description;
                     const catShopee = product.categories[2].catid;
                     const czCategory: any = await CategoriesMapModel.findById(catShopee);
                     if (!czCategory) {
@@ -98,6 +98,7 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                     }
 
                     filterMorePhoneNumbers(description, phoneNumbers);
+                    description = description?.length > 2 ? description: product.name;
                     let images = [];
                     product.images.map((item, index) => {
                         images.push({

@@ -37,6 +37,7 @@ export default (shopIds: string[], type: Number) => {
                         await approveProducts(shopId, czShopId, token);
                     }
 
+
                 }
             }
             catch (e) {

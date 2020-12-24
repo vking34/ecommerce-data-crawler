@@ -60,16 +60,23 @@ router.get('/raw-shops', (req: Request, resp: Response) => {
     }
 })
 
-// crawler shop by shop link
-router.post('raw-shops', (req: Request, resp: Response) => {
-    const shopLinks: [string] = req.body.shops;
-    resp.send({
-        status: true,
-        message: 'Crawling shops...'
-    });
-
-    markAndCrawlShops(shopLinks);
+// TODO: khanh
+router.get('/raw-shops/:shopId', (req: Request, resp: Response) => {
+    const shopId: string = req.params.shopId;
+    console.log(shopId);
+    resp.send({});
 })
+
+// crawler shop by shop link
+// router.post('/raw-shops', (req: Request, resp: Response) => {
+//     const shopLinks: [string] = req.body.shops;
+//     resp.send({
+//         status: true,
+//         message: 'Crawling shops...'
+//     });
+
+//     markAndCrawlShops(shopLinks);
+// })
 
 
 //get convertations shop
@@ -130,6 +137,7 @@ router.get('/converted-shops', (req: Request, resp: Response) => {
 
 
 // update shop model chozoishop
+// TODO: test
 router.put('/converted-shops/:shopId', async (req: Request, resp: Response) => {
     const shopId = req.params.shopId;
     const data = req.body.data;
@@ -173,19 +181,26 @@ router.get('/converted-shops/:shopId', async (req: Request, resp: Response) => {
 // crawl and convert shops by ids 
 router.post('/converted-shops', async (req: Request, resp: Response) => {
     const shopIds: string[] = req.body.shop_ids;
+    const shopLinks: string[] = req.body.shop_links;
+
     resp.send({
         status: true,
         message: 'Crawling shops...'
     });
 
-    convertShopByIds(shopIds);
+    if (shopIds?.length > 0) {
+        convertShopByIds(shopIds);
+    }
+    else {
+        markAndCrawlShops(shopLinks);
+    }
 })
 
 
 // approve shops to chozoi
 router.post('/approved-shops', async (req: Request, resp: Response) => {
     const shopIds: string[] = req.body.shop_ids;
-    
+
     resp.send({
         status: true,
         message: 'Approving shops...'

@@ -52,7 +52,7 @@ const markShop = (shopLink: string, shopIds: string[]) => {
 }
 
 
-export default async (shopLinks: [string]) => {
+export default async (shopLinks: string[]) => {
     let shopIds: string[] = [];
     for (let i = 0; i < shopLinks.length; i++) {
         const shopLink: string = shopLinks[i];

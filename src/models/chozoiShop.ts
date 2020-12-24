@@ -24,8 +24,14 @@ const ChozoiShop:  Schema = new mongoose.Schema(
             default: true
         },
         phone_number:String,
-        email: String,
-        contact_name: String,
+        email: {
+            type: String,
+            default: null
+        },
+        contact_name: {
+            type: String,
+            default: null
+        },
         page_url: String,
         img_avatar_url: String,
         img_description_urls: String,

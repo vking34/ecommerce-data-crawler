@@ -15,7 +15,7 @@ export const crawlProductsByShopId = async (shopId: string) => {
 
     try {
         const productIds = await ProductIdModel.find({ shop_id: shopId });
-        console.log('product ids:', productIds);
+        // console.log('product ids:', productIds);
         
         if (productIds) {
             for (let i = 0; i < productIds.length; i++) {

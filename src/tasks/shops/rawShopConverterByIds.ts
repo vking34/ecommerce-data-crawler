@@ -16,7 +16,7 @@ export default (shopIds: string[]) => {
                 const result: any = await ShopeeShopModel.findById(shopId);
                 // [ '$__', 'isNew', 'errors', '$locals', '$op', '_doc', '$init' ]
                 let shopDetail = result._doc;
-                console.log(shopDetail);
+                // console.log(shopDetail);
                 
                 const shopeeShopId: string = shopDetail.shopid;
                 const newLink: string = `https://shopee.vn/${shopDetail.account.username}`;

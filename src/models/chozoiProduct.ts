@@ -11,10 +11,10 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
         product_id: String,
         shop_id: String,
         name: String,
-        attributes: {
-            type: Array,
-            default: []
-        },
+        // attributes: {
+        //     type: Array,
+        //     default: []
+        // },
         packing_size:{
             type: Array,
             default: [10, 10, 10]
@@ -23,12 +23,15 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
             type: Array,
             default: []
         },
-        description: String,
-        category: Object,
-        shipping_partner_ids: {
-            type: Array,
-            default: []
+        description: {
+            type: String,
+            default: ''
         },
+        category: Object,
+        // shipping_partner_ids: {
+        //     type: Array,
+        //     default: []
+        // },
         type: { 
             type: String,
             default: 'NORMAL'
@@ -42,8 +45,8 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
             default: true
         },
         weight: {
-            type: String,
-            default: null
+            type: Number,
+            default: 1
         },
         auto_public: {
             type: Boolean,

@@ -53,6 +53,7 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                     const catShopee = product.categories[2].catid;
                     const czCategory: any = await CategoriesMapModel.findById(catShopee);
                     if (!czCategory) {
+                        
                         reject(new Error('Category of Product is not mapped'));
                     }
                     filterMorePhoneNumbers(product.description, phoneNumbers);

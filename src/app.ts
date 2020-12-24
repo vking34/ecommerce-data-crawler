@@ -34,11 +34,12 @@ app.use(cors());
 import productRoute from './routes/product';
 import shopRoute from './routes/shop';
 import shopeeShopRoute from './routes/shopee/shop';
+import shopeeProductRoute from './routes/shopee/product';
 
 app.use('/v1/crawlers/products', productRoute);
 app.use('/v1/crawlers/shops', shopRoute);
 app.use('/v1/crawlers/shopee', shopeeShopRoute);
-
+app.use('/v1/crawlers/shopee', shopeeProductRoute)
 // crawler
 // TODO: Schedule crawling tasks
 import crawl from './tasks/index';

@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 import mongoose from './index';
-
+import mongoosePaginate from 'mongoose-paginate-v2';
 const ChozoiProductSchema: Schema = new mongoose.Schema(
     {
         _id: {
@@ -64,4 +64,5 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
     }
 );
 
+ChozoiProductSchema.plugin(mongoosePaginate);
 export default mongoose.model('chozoi_products', ChozoiProductSchema);

@@ -182,7 +182,8 @@ router.get('/converted-shops/:shopId', async (req: Request, resp: Response) => {
 router.post('/converted-shops', async (req: Request, resp: Response) => {
     const shopIds: string[] = req.body.shop_ids;
     const shopLinks: string[] = req.body.shop_links;
-
+    console.log('shopIds',shopIds);
+    console.log('shoplink',shopLinks);
     resp.send({
         status: true,
         message: 'Crawling shops...'

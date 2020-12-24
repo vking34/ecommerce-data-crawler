@@ -1,12 +1,14 @@
 import { Schema } from "mongoose";
 import mongoose from './index';
 import mongoosePaginate from 'mongoose-paginate-v2';
+
 const ChozoiProductSchema: Schema = new mongoose.Schema(
     {
         _id: {
             type: String,
             required: [true, 'Product ID is required!']
         },
+        product_id: String,
         shop_id: String,
         name: String,
         attributes: {

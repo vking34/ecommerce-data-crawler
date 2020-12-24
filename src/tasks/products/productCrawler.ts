@@ -17,7 +17,9 @@ export const saveProduct = (productId: string, shopId: string) => {
                 try {
                     const productResponse = await axios.get(productApiUrl, { timeout: 4000 });
                     let product = productResponse.data.item;
-                    product._id = productId;
+                    product._id = `${Platforms.shopee}.${productId}`;
+                    product.product_id = productId;
+                    product.platform = Platforms.shopee;
                     ChozoiProductModel.create(product).catch(_e => { });
                     console.log('saving product:', productId);
                     resolve(1);
@@ -76,7 +78,8 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                         id: czCategory.cz_category_id
                     }
                     let productChozoi = {
-                        _id: product.itemid,
+                        _id: `${Platforms.shopee}.${productId}`,
+                        product_id: productId,
                         shop_id: `${Platforms.shopee}.${shopId}`,
                         name: product.name,
                         images,

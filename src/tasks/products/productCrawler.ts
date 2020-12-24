@@ -137,7 +137,6 @@ export default (productId: string, shopId: string, phoneNumbers: any) => {
                     });
                     console.log('saving product:', productId);
                     resolve(1);
-
                 }
                 catch (e) {
                     console.log('can not get product:', productId, e);

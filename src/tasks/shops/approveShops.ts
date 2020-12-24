@@ -33,6 +33,7 @@ export default (shopIds: string[]) => {
                     await ChozoiShopModel.updateOne({ _id: shopId }, { cz_shop_id: czShopId });
                     const token = await loginCZ(shop.username, shop.password);
                     await approveProducts(shopId, czShopId, token);
+                    await ChozoiShopModel.updateOne({ _id: shopId }, { state: 'APPROVED' });
                 }
             }
             catch (e) {

@@ -17,15 +17,13 @@ export default async (shopeeShopId: string, czShopId: string, token: string) => 
 
             czProducts.forEach(async product => {
                 const productCreationUrl = `${CHOZOI_API}/v1/shops/${czShopId}/products/confirmation`;
-                console.log('url:', productCreationUrl);
-                console.log('data:', product.variants);
-                
+
                 try {
                     const response = await axios.post(productCreationUrl, product, requestConfig);
                     if (response.status === 200) {
                         console.log('created product:', product._id, response.data.id);
                         // console.log(response.data);
-                        // await ChozoiProductModel.updateOne({ _id: product._id }, { state: 'APPROVED' });
+                        await ChozoiProductModel.updateOne({ _id: product._id }, { state: 'APPROVED' });
                     }
 
                 }

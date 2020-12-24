@@ -61,13 +61,13 @@ router.get('/converted-shops/:shopId/products', (req: Request, resp: Response) =
 
 })
 
-// product detail
+// get product detail
 router.get('/converted-shops/:shopId/products/:productId', async (req: Request, resp: Response) => {
     const shopId: string = req.params.shopId;
     const productId: string = req.params.productId;
-
+    
     try {
-        const product = await ChozoiProduct.findOne({ _id: productId, shop_id: shopId })
+        const product = await ChozoiProduct.findOne({ _id: productId, shop_id: shopId})
         resp.send(product);
     }
     catch (e) {

@@ -11,6 +11,10 @@ const ShopeeShopSchema: Schema = new mongoose.Schema(
         phone_numbers: {
             type: Array,
             default: []
+        },
+        is_crawled: {
+            type: Boolean,
+            default: false
         }
     },
     {

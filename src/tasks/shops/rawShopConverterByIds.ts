@@ -16,7 +16,7 @@ export default (shopIds: string[]) => {
                 const result: any = await ShopeeShopModel.findById(shopId);
                 // [ '$__', 'isNew', 'errors', '$locals', '$op', '_doc', '$init' ]
                 let shopDetail = result._doc;
-                
+
                 const shopeeShopId: string = shopDetail.shopid;
                 const newLink: string = `https://shopee.vn/${shopDetail.account.username}`;
                 const phoneNumers = filterPhoneNumbers(shopDetail.description);
@@ -41,6 +41,7 @@ export default (shopIds: string[]) => {
                 }
                 // console.log(shop);
                 await ChozoiShopModel.create(shop);
+                await ShopeeShopModel.updateOne({ _id: shopId }, { is_crawled: true });
                 await crawlProductsByShopId(shopeeShopId);
                 await ChozoiShopModel.updateOne({ shop_id: shopId }, { state: 'DONE' });
             }

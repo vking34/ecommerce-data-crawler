@@ -10,10 +10,15 @@ const router: Router = express.Router();
 
 // get raw shops
 router.get('/raw-shops', (req: Request, resp: Response) => {
-    let filters: any = {};
+    let filters: any = {
+        $or: [
+            { is_crawled: { $exists: false } },
+            { is_crawled: false }
+        ]
+    };
     try {
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
-        let limit: number = req.query.page ? parseInt(req.query.limit as string) : 10;
+        let limit: number = req.query.limit ? parseInt(req.query.limit as string) : 10;
         let paginateOpts = {
             page,
             limit
@@ -60,11 +65,18 @@ router.get('/raw-shops', (req: Request, resp: Response) => {
     }
 })
 
-// TODO: khanh
-router.get('/raw-shops/:shopId', (req: Request, resp: Response) => {
+
+router.get('/raw-shops/:shopId', async (req: Request, resp: Response) => {
     const shopId: string = req.params.shopId;
-    console.log(shopId);
-    resp.send({});
+    try {
+        const shop = await ShopeeShopModel.findById(shopId);
+        resp.send(shop);
+    }
+    catch (e) {
+        resp.status(500).send({
+            error_message: e
+        });
+    }
 })
 
 // crawler shop by shop link
@@ -89,7 +101,7 @@ router.get('/converted-shops', (req: Request, resp: Response) => {
         }
 
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
-        let limit: number = req.query.page ? parseInt(req.query.limit as string) : 10;
+        let limit: number = req.query.limit ? parseInt(req.query.limit as string) : 10;
         let paginateOpts = {
             page,
             limit
@@ -135,6 +147,23 @@ router.get('/converted-shops', (req: Request, resp: Response) => {
     }
 });
 
+// crawl and convert shops by ids 
+router.post('/converted-shops', async (req: Request, resp: Response) => {
+    const shopIds: string[] = req.body.shop_ids;
+    const shopLinks: string[] = req.body.shop_links;
+
+    resp.send({
+        status: true,
+        message: 'Crawling shops...'
+    });
+
+    if (shopIds?.length > 0) {
+        convertShopByIds(shopIds);
+    }
+    else {
+        markAndCrawlShops(shopLinks);
+    }
+})
 
 // update shop model chozoishop
 // TODO: test
@@ -160,21 +189,19 @@ router.put('/converted-shops/:shopId', async (req: Request, resp: Response) => {
 
 });
 
-
+// get shop detail
 router.get('/converted-shops/:shopId', async (req: Request, resp: Response) => {
-
     const shopId = req.params.shopId;
-    try {
-        console.log(shopId);
 
+    try {
         const shop = await ChozoiShopModel.findById(shopId)
         resp.send(shop)
-
     }
     catch (e) {
-        resp.send(e);
+        resp.status(500).send({
+            error_message: e
+        });
     }
-
 });
 
 
@@ -182,8 +209,6 @@ router.get('/converted-shops/:shopId', async (req: Request, resp: Response) => {
 router.post('/converted-shops', async (req: Request, resp: Response) => {
     const shopIds: string[] = req.body.shop_ids;
     const shopLinks: string[] = req.body.shop_links;
-    console.log('shopIds',shopIds);
-    console.log('shoplink',shopLinks);
     resp.send({
         status: true,
         message: 'Crawling shops...'

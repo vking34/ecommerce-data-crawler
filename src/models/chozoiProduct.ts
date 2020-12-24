@@ -64,10 +64,13 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
         shipping_partner_code: {
             type: String,
             default: "SELLER_EXPRESS"
-        } 
+        },
+        state: {
+            type: String,
+            default: 'DRAFT'
+        }
     },
     {
-    
         timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
     }
 );

@@ -22,6 +22,7 @@ export default async (shopeeShopId: string, czShopId: string, token: string) => 
                     if (response.status === 200) {
                         console.log('created product:', product._id, response.data.id);
                         // console.log(response.data);
+                        await ChozoiProductModel.updateOne({_id: product._id}, {state: 'APPROVED'});
                     }
                     
                 }

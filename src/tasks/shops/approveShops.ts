@@ -22,7 +22,7 @@ export default (shopIds: string[]) => {
                 imgCoverUrl: shop.img_cover_url,
                 description: description.length < 251 ? description : description.substring(0, 249)
             }
-            console.log(shopRequestData);
+            // console.log(shopRequestData);
 
             try {
                 const response = await axios.post(SELLER_CREATION_URL, shopRequestData, { timeout: 10000 });
@@ -33,36 +33,11 @@ export default (shopIds: string[]) => {
                     await ChozoiShopModel.updateOne({ _id: shopId }, { cz_shop_id: czShopId });
                     const token = await loginCZ(shop.username, shop.password);
                     await approveProducts(shopId, czShopId, token);
-
                 }
             }
             catch (e) {
                 console.log('can not create seller:', shopId, e);
             }
-
-            // try {
-            //     const response = await axios({
-            //         method: 'post',
-            //         url: `${CHOZOI_API}/v1/auth/create_account`,
-            //         data: data
-            //     })
-            //     console.log(response.statusText);
-            //     if (response.status == 200) {
-            //         const access_token = await loginCZ(shop.username, shop.password);
-            //         markProduct(shopId, access_token);
-
-            //     }
-            //     resp.send({
-            //         status: true,
-            //     })
-
-            // }
-            // catch (e) {
-            //     console.log(e);
-
-
-            // }
-
         }
         catch (e) {
             console.log(e);

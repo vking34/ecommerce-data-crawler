@@ -6,6 +6,7 @@ import convertShopByIds from '../../tasks/shops/rawShopConverterByIds';
 import approveShops from '../../tasks/shops/approveShops';
 
 
+
 const router: Router = express.Router();
 
 // get raw shops
@@ -224,16 +225,17 @@ router.post('/converted-shops', async (req: Request, resp: Response) => {
 })
 
 
-// approve shops to chozoi
+// approve shops  to chozoi
 router.post('/approved-shops', async (req: Request, resp: Response) => {
     const shopIds: string[] = req.body.shop_ids;
-
+    let type: number = req.body.type ? parseInt(req.body.type as string) : 1;
     resp.send({
         status: true,
         message: 'Approving shops...'
     });
-
-    approveShops(shopIds);
+    
+    approveShops(shopIds, type)
+    
 });
 
 export default router;

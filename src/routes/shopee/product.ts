@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import ChozoiProduct from '../../models/chozoiProduct';
+import approveProductsByIds from '../../tasks/products/approveProductsByIds';
 
 
 const router: Router = express.Router();
@@ -110,6 +111,19 @@ router.put('/converted-shops/:shopId/products/:productId', async (req: Request, 
             err: e
         })
     }
+});
+
+// approve product by productid 
+router.post('/converted-shops/:shopId/approved-products', async (req: Request, resp: Response) =>{
+        const productIds: string[] = req.body.productIds;
+        const shopId: string = req.params.shopId;
+
+        resp.send({
+            status: true,
+            message: "Approving products..."
+        })
+        
+        approveProductsByIds(shopId,productIds);
 })
 
 export default router;

@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { CHOZOI_API } from '../../constants/api';
-import approveProducts from '../../tasks/products/approveProducts';
+import approveProducts from '../products/approveProducts';
 import { loginCZ } from '../../utils/chozoi';
 import ChozoiShopModel from '../../models/chozoiShop';
 
 
 const SELLER_CREATION_URL = `${CHOZOI_API}/v1/auth/create_account`;
-export default (shopIds: string[]) => {
+export default (shopIds: string[], type: Number) => {
     shopIds.forEach(async shopId => {
         try {
             const shop = await ChozoiShopModel.findById(shopId)
@@ -31,8 +31,12 @@ export default (shopIds: string[]) => {
                     console.log(response.data);
                     const czShopId: string = response.data.shopId;
                     await ChozoiShopModel.updateOne({ _id: shopId }, { cz_shop_id: czShopId });
-                    const token = await loginCZ(shop.username, shop.password);
-                    await approveProducts(shopId, czShopId, token);
+                    
+                    if (type == 1) {
+                        const token = await loginCZ(shop.username, shop.password);
+                        await approveProducts(shopId, czShopId, token);
+                    }
+
                 }
             }
             catch (e) {

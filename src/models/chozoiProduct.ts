@@ -9,7 +9,10 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
         },
         shop_id: String,
         name: String,
-        attributes: Array,
+        attributes: {
+            type: Array,
+            default: []
+        },
         packing_size:{
             type: Array,
             default: [10, 10, 10]
@@ -36,7 +39,10 @@ const ChozoiProductSchema: Schema = new mongoose.Schema(
             type: Boolean,
             default: true
         },
-        weight: Number,
+        weight: {
+            type: String,
+            default: null
+        },
         auto_public: {
             type: Boolean,
             default: true

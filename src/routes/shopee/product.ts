@@ -6,21 +6,22 @@ const router: Router = express.Router();
 
 // product list
 router.get('/converted-shops/:shopId/products',(req: Request, resp: Response) => {
-    console.log('pppppppppp-=-=-=---------------------------------');
-    
+   
     const shopId: string = req.params.shopId;
     let filters: any = {}
-    console.log(shopId);
+   
     try{
         if(shopId){
-            filters.platform = shopId
+            filters.shop_id = shopId
         }
+
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
         let limit: number = req.query.page ? parseInt(req.query.limit as string) : 10;
         let paginateOpts = {
             page,
             limit
         };
+   
         ChozoiProduct.paginate(filters,paginateOpts)
         .then(shopResult => [
             resp.send({
@@ -59,32 +60,63 @@ router.get('/converted-shops/:shopId/products',(req: Request, resp: Response) =>
             }
         });
     }
-    resp.send({});
+
 })
 
 // product detail
 router.get('/converted-shops/:shopId/products/:productId', async (req: Request, resp: Response) => {
     const shopId: string = req.params.shopId;
     const productId: string = req.params.productId;
-    console.log(shopId, productId);
+
     try{
+
         const product =  await ChozoiProduct.find({ _id: productId, shop_id: shopId})
         resp.send(product);
     }
     catch(e){
     
-        resp.send(e);
+        resp.status(500).send({
+            error_message: e
+        });
     }
+
     
 })
 
 
 // update product
-router.put('/converted-shops/:shopId/products/:productId', (req: Request, resp: Response) => {
-    const product = req.body.product;
-    console.log(product);
+router.put('/converted-shops/:shopId/products/:productId', async (req: Request, resp: Response) => {
+    const productId = req.params.productId;
+    const shopId = req.params.shopId
+    const data = req.body.data
+    let filters = {
+        _id: productId,
+        shop_id: shopId
+    }
+    console.log(filters);
+    
+    try{
+       const product = await ChozoiProduct.findOneAndUpdate(filters,data);
 
-    resp.send({});
+       if(product){
+        resp.send({
+            status: true,
+            message: "Update Successfully!"
+        })
+       }
+       else {
+        resp.status(400).send({
+            error_message: "Update failed"
+        });
+       }
+    }
+    catch(e){
+        resp.send({
+            status: false,
+            err: e
+        })
+    }
+    
 })
 
 export default router;

@@ -68,6 +68,7 @@ router.get('/raw-shops', (req: Request, resp: Response) => {
 
 router.get('/raw-shops/:shopId', async (req: Request, resp: Response) => {
     const shopId: string = req.params.shopId;
+    
     try {
         const shop = await ShopeeShopModel.findById(shopId);
         resp.send(shop);

@@ -23,7 +23,6 @@ export default (shopIds: string[], type: Number) => {
                 description: description.length < 251 ? description : description.substring(0, 249)
             }
             // console.log(shopRequestData);
-
             try {
                 const response = await axios.post(SELLER_CREATION_URL, shopRequestData, { timeout: 10000 });
                 console.log('status:', response.status);
@@ -31,12 +30,11 @@ export default (shopIds: string[], type: Number) => {
                     console.log(response.data);
                     const czShopId: string = response.data.shopId;
                     await ChozoiShopModel.updateOne({ _id: shopId }, { cz_shop_id: czShopId });
-                    
-                    if (type == 1) {
+                   
+                    if (type == 2) {
                         const token = await loginCZ(shop.username, shop.password);
                         await approveProducts(shopId, czShopId, token);
                     }
-
 
                 }
             }

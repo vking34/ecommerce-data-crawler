@@ -15,17 +15,19 @@ export const crawlProductsByShopId = async (shopId: string) => {
 
     try {
         const productIds = await ProductIdModel.find({ shop_id: shopId });
+        const totalProducts: number = productIds.length;
+        await ChozoiShopModel.updateOne({ shop_id: shopId }, { total_products: totalProducts });
         // console.log('product ids:', productIds);
-        
+
         if (productIds) {
-            for (let i = 0; i < productIds.length; i++) {
+            for (let i = 0; i < totalProducts; i++) {
                 const productId: any = productIds[i];
                 try {
                     await saveProduct(productId.product_id, productId.shop_id, phoneNumbers);
                 }
                 catch (e) {
                     console.log('skip product:', productId.product_id, e);
-                    
+
                 }
             }
         }

@@ -17,6 +17,13 @@ router.get('/raw-shops', (req: Request, resp: Response) => {
             { is_crawled: false }
         ]
     };
+    if (req.query.phone_numbers === '1') {
+        filters['phone_numbers.0'] = { $exists: true }
+    }
+    else if (req.query.phone_numbers === '0') {
+        filters['phone_numbers.0'] = { $exists: false }
+    }
+
     try {
         let page: number = req.query.page ? parseInt(req.query.page as string) : 1;
         let limit: number = req.query.limit ? parseInt(req.query.limit as string) : 10;

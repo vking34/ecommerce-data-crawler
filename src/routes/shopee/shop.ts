@@ -102,8 +102,16 @@ router.get('/raw-shops/:shopId', async (req: Request, resp: Response) => {
 
 //get convertations shop
 router.get('/converted-shops', (req: Request, resp: Response) => {
-    let filters: any = {};
     const state = req.query.state;
+    let filters: any = {};
+    
+    if (req.query.phone_numbers === '1') {
+        filters['phone_numbers.0'] = { $exists: true }
+    }
+    else if (req.query.phone_numbers === '0') {
+        filters['phone_numbers.0'] = { $exists: false }
+    }
+
     try {
         if (state) {
             filters.state = state;

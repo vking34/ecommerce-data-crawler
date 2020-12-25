@@ -114,8 +114,8 @@ router.put('/converted-shops/:shopId/products/:productId', async (req: Request, 
 });
 
 // approve product by productid 
-router.post('/converted-shops/:shopId/approved-products', async (req: Request, resp: Response) =>{
-        const productIds: string[] = req.body.productIds;
+router.post('/approved-shops/:shopId/approved-products', async (req: Request, resp: Response) =>{
+        const productIds: string[] = req.body.product_ids;
         const shopId: string = req.params.shopId;
 
         resp.send({

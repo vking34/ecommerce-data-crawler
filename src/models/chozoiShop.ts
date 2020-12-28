@@ -23,7 +23,10 @@ const ChozoiShop:  Schema = new mongoose.Schema(
             type: Boolean,
             default: true
         },
-        phone_number:String,
+        phone_number: {
+            type: String,
+            default: null
+        },
         email: {
             type: String,
             default: null

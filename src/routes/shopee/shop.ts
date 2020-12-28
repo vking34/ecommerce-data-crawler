@@ -186,7 +186,7 @@ router.post('/converted-shops', async (req: Request, resp: Response) => {
 // TODO: test
 router.put('/converted-shops/:shopId', async (req: Request, resp: Response) => {
     const shopId = req.params.shopId;
-    const data = req.body.data;
+    const data = req.body;
     let filter = {
         _id: shopId
     }

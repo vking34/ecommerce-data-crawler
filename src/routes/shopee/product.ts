@@ -83,7 +83,7 @@ router.get('/converted-shops/:shopId/products/:productId', async (req: Request, 
 router.put('/converted-shops/:shopId/products/:productId', async (req: Request, resp: Response) => {
     const productId = req.params.productId;
     const shopId = req.params.shopId
-    const data = req.body.data
+    const data = req.body
     let filters = {
         _id: productId,
         shop_id: shopId

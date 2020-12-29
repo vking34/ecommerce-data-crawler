@@ -1,6 +1,8 @@
 import ProductIdModel from '../../models/shopeeProductId';
 import saveProduct from './productCrawler';
 import ChozoiShopModel from '../../models/chozoiShop';
+import { Platforms } from '../../constants/common';
+
 
 
 export const crawlProductsByShopId = async (shopId: string) => {
@@ -15,8 +17,10 @@ export const crawlProductsByShopId = async (shopId: string) => {
 
     try {
         const productIds = await ProductIdModel.find({ shop_id: shopId });
+
+        let _id = `${Platforms.shopee}.${shopId}`
         const totalProducts: number = productIds.length;
-        await ChozoiShopModel.updateOne({ shop_id: shopId }, { total_products: totalProducts });
+        await ChozoiShopModel.updateOne({ _id: _id }, { total_products: totalProducts });
         // console.log('product ids:', productIds);
 
         if (productIds) {

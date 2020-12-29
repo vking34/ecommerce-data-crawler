@@ -22,6 +22,7 @@ export const saveProduct = (productId: string, shopId: string) => {
                     const czCategory: any = await CategoriesMapModel.findById(catShopee);
                     if (!czCategory) {
                         reject(new Error('Category of Product is not mapped'));
+                        return;
                     }
 
                     let images = [];

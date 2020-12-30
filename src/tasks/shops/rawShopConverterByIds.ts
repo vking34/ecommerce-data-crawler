@@ -42,9 +42,10 @@ export default (shopIds: string[]) => {
                 }
                 // console.log(shop);
                 await ChozoiShopModel.create(shop);
-                await ShopeeShopModel.updateOne({ _id: shopId }, { is_crawled: true });
+                await ShopeeShopModel.updateOne({ _id: shopId }, { is_crawled: true, state: 'PROCESSING'  });
                 await crawlProductsByShopId(shopeeShopId);
                 await ChozoiShopModel.updateOne({ shop_id: shopId }, { state: 'DONE' });
+                await ShopeeShopModel.updateOne({ _id: shopId }, {  state: 'DONE'  });
             }
             else {
                 console.log('crawled shop:', shopId);

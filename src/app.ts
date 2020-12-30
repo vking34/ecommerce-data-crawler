@@ -4,7 +4,7 @@ import monogoose from 'mongoose';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-
+import fileUpload from 'express-fileupload';
 // configs
 const port = process.env.PORT || 3003
 const app = express();
@@ -23,13 +23,18 @@ monogoose.connection.once('open', () => {
     console.log('Connected to mongoDB!');
 });
 
+// enable files upload
+app.use(fileUpload({
+    createParentPath: true
+}));
 
 // middlewares
-app.use(morgan('dev'));
-app.use(bodyParser.json());
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(morgan('dev'));
 
-
+ 
 // routes
 import productRoute from './routes/product';
 import shopRoute from './routes/shop';

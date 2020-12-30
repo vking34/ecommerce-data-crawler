@@ -15,6 +15,10 @@ const ShopeeShopSchema: Schema = new mongoose.Schema(
         is_crawled: {
             type: Boolean,
             default: false
+        },
+        state: {
+            type: String,
+            default: 'RAW'
         }
     },
     {

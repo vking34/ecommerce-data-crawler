@@ -4,8 +4,10 @@ import ChozoiShopModel from '../../models/chozoiShop';
 import ShopeeShopModel from '../../models/shopeeShop'
 import convertShopByIds from '../../tasks/shops/rawShopConverterByIds';
 import approveShops from '../../tasks/shops/approveShops';
-import uploadFile from '../../utils/uploadFile';
-
+import _ from 'mongoose-paginate-v2';
+import upload from '../../utils/uploadFile';
+import readFile from '../../utils/readFile';
+import validUrl from 'valid-url';
 
 const router: Router = express.Router();
 
@@ -171,8 +173,6 @@ router.post('/converted-shops', async (req: Request, resp: Response) => {
     let rawShop = [];
     let convertedShop = [];
 
-
-
     if (shopIds?.length > 0) {
         const rawShop = [];
         for (let i = 0; i < shopIds.length; i++) {
@@ -193,12 +193,19 @@ router.post('/converted-shops', async (req: Request, resp: Response) => {
         convertShopByIds(rawShop);
     }
     else {
+        console.log(shopLinks);
 
         for (let i = 0; i < shopLinks.length; i++) {
+
+            if (!validUrl.isUri(shopLinks[i])) {
+                resp.status(400).send({
+                    message: 'Bad URL'
+                })
+            }
             const shopUrl = new URL(shopLinks[i]);
             const shopName = shopUrl.pathname.substring(1);
             const shop = await ChozoiShopModel.findOne({ username: shopName })
-          
+
             if (shop === null || shop === undefined || shop.length === 0) {
                 await rawShop.push(shopLinks[i]);
             }
@@ -218,11 +225,47 @@ router.post('/converted-shops', async (req: Request, resp: Response) => {
 // crawl and convert shops by file excel
 
 router.post('/converted-shops-file', async (req: any, resp: Response) => {
-    
-        resp.send(uploadFile(req));
-        
-     
-})
+
+    try {
+        if (!req.files) {
+            resp.send({
+                status: false,
+                message: 'No file uploaded'
+            });
+        }
+        else {
+            const fileName = await upload(req);
+            const rawShopIds = await readFile(fileName);
+            const shopIds = [];
+            const rawShops: any[] = [];
+            const result = await ShopeeShopModel.find({ _id: { $in: rawShopIds } });
+
+            for (let i = 0; i < result.length; i++) {
+                console.log(result[i]);
+                const rawShop = result[i]._doc;
+                const shop = {
+                    _id: rawShop._id,
+                    username: rawShop.account.username,
+                    is_official_shop: rawShop.is_official_shop,
+                    phone_numbers: rawShop.phone_numbers,
+                    state: rawShop.state,
+                    created_at: rawShop.created_at
+                }
+                if (shop.state !== 'PROCESSING' || shop.state !== 'DONE') {
+                    shopIds.push(shop._id)
+                }
+                rawShops.push(shop)
+
+            }
+            resp.send(rawShops);
+            convertShopByIds(shopIds);
+        }
+    } catch (err) {
+        resp.status(500).send(err);
+    }
+});
+
+
 
 // update shop model chozoishop
 // TODO: test

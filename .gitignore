@@ -47,6 +47,6 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
-
+uploads/
 sitemaps/
 zk-single-kafka-multiple/
